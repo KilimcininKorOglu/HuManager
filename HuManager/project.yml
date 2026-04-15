@@ -1,0 +1,47 @@
+name: HuManager
+options:
+  bundleIdPrefix: com.humanager
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+
+targets:
+  HuManager:
+    type: application
+    platform: macOS
+    sources:
+      - path: HuManager
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.humanager.HuManager
+        INFOPLIST_GENERATION_MODE: GeneratedFile
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        PRODUCT_NAME: HuManager
+        SWIFT_STRICT_CONCURRENCY: complete
+        GENERATE_INFOPLIST_FILE: YES
+    entitlements:
+      path: HuManager/Resources/HuManager.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+        com.apple.security.network.client: true
+
+  HuManagerTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: HuManagerTests
+    dependencies:
+      - target: HuManager
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.humanager.HuManagerTests
+        GENERATE_INFOPLIST_FILE: YES
