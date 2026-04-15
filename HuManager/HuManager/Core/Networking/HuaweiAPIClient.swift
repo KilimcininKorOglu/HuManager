@@ -21,10 +21,16 @@ final class HuaweiAPIClient: Sendable {
         self.urlSession = URLSession(configuration: config)
     }
 
+    // MARK: - URL Helper
+
+    private func makeURL(_ endpoint: String) -> URL {
+        URL(string: baseURL.absoluteString + endpoint)!
+    }
+
     // MARK: - GET
 
     func get(_ endpoint: String) async throws -> [String: Any] {
-        let url = baseURL.appendingPathComponent(endpoint)
+        let url = makeURL(endpoint)
         var request = URLRequest(url: url, timeoutInterval: timeout)
         request.httpMethod = "GET"
         await applyCommonHeaders(&request)
@@ -36,7 +42,7 @@ final class HuaweiAPIClient: Sendable {
     }
 
     func getRaw(_ endpoint: String) async throws -> (Data, HTTPURLResponse) {
-        let url = baseURL.appendingPathComponent(endpoint)
+        let url = makeURL(endpoint)
         var request = URLRequest(url: url, timeoutInterval: timeout)
         request.httpMethod = "GET"
         await applyCommonHeaders(&request)
@@ -48,7 +54,7 @@ final class HuaweiAPIClient: Sendable {
     }
 
     func getHTML(_ endpoint: String) async throws -> String {
-        let url = baseURL.appendingPathComponent(endpoint)
+        let url = makeURL(endpoint)
         var request = URLRequest(url: url, timeoutInterval: timeout)
         request.httpMethod = "GET"
         await applyCommonHeaders(&request)
@@ -65,7 +71,7 @@ final class HuaweiAPIClient: Sendable {
     // MARK: - POST
 
     func post(_ endpoint: String, body: String) async throws -> [String: Any] {
-        let url = baseURL.appendingPathComponent(endpoint)
+        let url = makeURL(endpoint)
         var request = URLRequest(url: url, timeoutInterval: timeout)
         request.httpMethod = "POST"
         await applyCommonHeaders(&request)
@@ -81,11 +87,20 @@ final class HuaweiAPIClient: Sendable {
         return try XMLResponseParser.parseResponse(data: data)
     }
 
-    func postForLogin(_ endpoint: String, body: String, token: String? = nil) async throws -> (Data, HTTPURLResponse) {
-        let url = baseURL.appendingPathComponent(endpoint)
+    func postForLogin(_ endpoint: String, body: String, token: String? = nil, sendCookies: Bool = false) async throws -> (Data, HTTPURLResponse) {
+        let url = makeURL(endpoint)
         var request = URLRequest(url: url, timeoutInterval: timeout)
         request.httpMethod = "POST"
-        await applyCommonHeaders(&request)
+
+        // Login requests: only send X-Requested-With and token, NOT cookies
+        // (matches Python reference: cookies=None for v17/21 login)
+        request.setValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
+
+        if sendCookies {
+            if let cookie = await session.buildCookieHeader() {
+                request.setValue(cookie, forHTTPHeaderField: "Cookie")
+            }
+        }
 
         if let token {
             request.setValue(token, forHTTPHeaderField: "__RequestVerificationToken")

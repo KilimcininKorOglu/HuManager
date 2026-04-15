@@ -18,16 +18,30 @@ final class AuthService: Sendable {
         username: String,
         password: String
     ) async throws -> AuthResult {
-        // Step 1: Detect WebUI version and extract initial token
+        // Step 0: Reset any prior session state
+        await client.session.reset()
+
+        // Step 1: Initialize session — GET root to establish SessionID cookie
+        logger.info("Oturum başlatılıyor...")
+        do {
+            let _ = try await client.getRaw("/")
+        } catch {
+            logger.debug("Root GET hatası (beklenen olabilir): \(error.localizedDescription)")
+        }
+
+        // Step 2: Detect WebUI version and extract initial token
         logger.info("WebUI versiyonu algılanıyor...")
         let detection = try await versionDetector.detect(using: client)
-
         logger.info("WebUI v\(detection.version.rawValue) algılandı")
 
-        // Step 2: Set initial token in session manager
+        // Step 3: Set initial token
         await client.session.setInitialToken(detection.token)
 
-        // Step 3: Dispatch to appropriate auth provider
+        // Step 4: Check login state and get password_type
+        let passwordType = await getPasswordType(client: client)
+        logger.debug("password_type: \(passwordType)")
+
+        // Step 5: Dispatch to appropriate auth provider
         switch detection.version {
         case .v17, .v21:
             logger.info("SHA256 auth kullanılıyor (v\(detection.version.rawValue))")
@@ -35,21 +49,25 @@ final class AuthService: Sendable {
                 client: client,
                 username: username,
                 password: password,
-                token: detection.token
+                token: detection.token,
+                passwordType: passwordType
             )
 
         case .v10:
             logger.info("SCRAM auth kullanılıyor (v10)")
+            // v10: re-fetch token right before login (as per Python reference)
+            let freshToken = await refreshTokenForV10(client: client) ?? detection.token
+            await client.session.setInitialToken(freshToken)
             try await scramProvider.login(
                 client: client,
                 username: username,
                 password: password,
-                token: detection.token
+                token: freshToken
             )
         }
 
-        // Step 4: Refresh session token after login
-        try await refreshSessionToken(client: client)
+        // Step 6: Refresh session token after successful login
+        await refreshSessionToken(client: client)
 
         return AuthResult(version: detection.version, token: detection.token)
     }
@@ -63,9 +81,32 @@ final class AuthService: Sendable {
         logger.info("Oturumdan çıkış yapıldı")
     }
 
-    // MARK: - Session Token Refresh
+    // MARK: - Private Helpers
 
-    private func refreshSessionToken(client: HuaweiAPIClient) async throws {
+    private func getPasswordType(client: HuaweiAPIClient) async -> String {
+        do {
+            let response = try await client.get(Endpoints.stateLogin)
+            return response["password_type"] as? String ?? "4"
+        } catch {
+            logger.debug("state-login alınamadı, varsayılan password_type=4")
+            return "4"
+        }
+    }
+
+    private func refreshTokenForV10(client: HuaweiAPIClient) async -> String? {
+        do {
+            let response = try await client.get(Endpoints.webserverToken)
+            if let fullToken = response["token"] as? String, !fullToken.isEmpty {
+                let start = fullToken.index(fullToken.startIndex, offsetBy: max(0, fullToken.count - 32))
+                return String(fullToken[start...])
+            }
+        } catch {
+            logger.debug("v10 token yenilenirken hata: \(error.localizedDescription)")
+        }
+        return nil
+    }
+
+    private func refreshSessionToken(client: HuaweiAPIClient) async {
         do {
             let response = try await client.get(Endpoints.sesTokInfo)
 

@@ -33,6 +33,7 @@ actor SessionManager {
     }
 
     func processResponseHeaders(_ response: HTTPURLResponse) {
+        // Token rotation from response headers
         if let tokenHeader = response.value(forHTTPHeaderField: "__RequestVerificationToken") {
             let parts = tokenHeader.split(separator: "#").map(String.init).filter { !$0.isEmpty }
 
@@ -44,12 +45,15 @@ actor SessionManager {
             logger.debug("Token güncellendi, yığın: \(self.tokens.count)")
         }
 
-        if let cookies = response.value(forHTTPHeaderField: "Set-Cookie"),
-           let sessionRange = cookies.range(of: "SessionID=") {
-            let afterEquals = cookies[sessionRange.upperBound...]
-            let sessionValue = afterEquals.prefix(while: { $0 != ";" && $0 != "," })
-            sessionId = String(sessionValue)
-            logger.debug("SessionID güncellendi")
+        // Extract SessionID using HTTPCookie parser (handles multiple Set-Cookie headers)
+        let url = response.url ?? URL(string: "http://localhost")!
+        let headerFields = response.allHeaderFields as? [String: String] ?? [:]
+        let cookies = HTTPCookie.cookies(withResponseHeaderFields: headerFields, for: url)
+
+        for cookie in cookies where cookie.name == "SessionID" {
+            sessionId = cookie.value
+            logger.debug("SessionID güncellendi: \(cookie.value.prefix(8))...")
+            break
         }
     }
 

@@ -9,7 +9,8 @@ final class SHA256AuthProvider: Sendable {
         client: HuaweiAPIClient,
         username: String,
         password: String,
-        token: String
+        token: String,
+        passwordType: String = "4"
     ) async throws {
         // Step 1: password_hash = base64(hex(SHA256(password)))
         let passwordHash = CryptoHelpers.sha256Base64Hex(password)
@@ -18,13 +19,13 @@ final class SHA256AuthProvider: Sendable {
         let combined = username + passwordHash + token
         let loginValue = CryptoHelpers.sha256Base64Hex(combined)
 
-        logger.debug("SHA256 login hazırlanıyor: user=\(username)")
+        logger.debug("SHA256 login hazırlanıyor: user=\(username), passwordType=\(passwordType)")
 
         // Step 3: Build XML body
         let body = XMLRequestBuilder.buildOrdered(elements: [
             ("Username", username),
             ("Password", loginValue),
-            ("password_type", "4")
+            ("password_type", passwordType)
         ])
 
         // Step 4: POST to /api/user/login
