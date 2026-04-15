@@ -31,7 +31,7 @@ struct ContentView: View {
             case .signal:
                 SignalDetailView(client: client)
             case .bands:
-                placeholderView("Band Kilidi", "Faz 4")
+                BandLockView(client: client)
             case .sms:
                 placeholderView("SMS Yönetimi", "Faz 5")
             case .network:
