@@ -24,38 +24,33 @@ struct ContentView: View {
 
     @ViewBuilder
     private var detailView: some View {
-        switch appVM.selectedTab {
-        case .dashboard:
-            Text("Gösterge Paneli — Faz 3'te gelecek")
+        if let client = appVM.apiClient {
+            switch appVM.selectedTab {
+            case .dashboard:
+                DashboardView(client: client)
+            case .signal:
+                SignalDetailView(client: client)
+            case .bands:
+                placeholderView("Band Kilidi", "Faz 4")
+            case .sms:
+                placeholderView("SMS Yönetimi", "Faz 5")
+            case .network:
+                placeholderView("Ağ Modu", "Faz 4")
+            case .traffic:
+                placeholderView("Trafik İstatistikleri", "Faz 6")
+            case .wifi:
+                placeholderView("WiFi Yönetimi", "Faz 6")
+            case .device:
+                placeholderView("Cihaz Bilgisi", "Faz 6")
+            }
+        }
+    }
+
+    private func placeholderView(_ title: String, _ phase: String) -> some View {
+        VStack(spacing: 8) {
+            Text(title)
                 .font(.title2)
-                .foregroundStyle(.secondary)
-        case .signal:
-            Text("Sinyal İzleme — Faz 3'te gelecek")
-                .font(.title2)
-                .foregroundStyle(.secondary)
-        case .bands:
-            Text("Band Kilidi — Faz 4'te gelecek")
-                .font(.title2)
-                .foregroundStyle(.secondary)
-        case .sms:
-            Text("SMS Yönetimi — Faz 5'te gelecek")
-                .font(.title2)
-                .foregroundStyle(.secondary)
-        case .network:
-            Text("Ağ Modu — Faz 4'te gelecek")
-                .font(.title2)
-                .foregroundStyle(.secondary)
-        case .traffic:
-            Text("Trafik İstatistikleri — Faz 6'da gelecek")
-                .font(.title2)
-                .foregroundStyle(.secondary)
-        case .wifi:
-            Text("WiFi Yönetimi — Faz 6'da gelecek")
-                .font(.title2)
-                .foregroundStyle(.secondary)
-        case .device:
-            Text("Cihaz Bilgisi — Faz 6'da gelecek")
-                .font(.title2)
+            Text("\(phase)'te gelecek")
                 .foregroundStyle(.secondary)
         }
     }

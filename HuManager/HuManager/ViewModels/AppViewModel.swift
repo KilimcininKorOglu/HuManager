@@ -48,6 +48,7 @@ final class AppViewModel {
     private(set) var apiClient: HuaweiAPIClient?
     private(set) var webUIVersion: WebUIVersion?
     private let authService = AuthService()
+    private let heartbeatService = HeartbeatService()
 
     var isConnected: Bool {
         if case .connected = connectionState { return true }
@@ -69,6 +70,7 @@ final class AppViewModel {
             )
             webUIVersion = result.version
             connectionState = .connected
+            await heartbeatService.start(client: client)
         } catch {
             connectionState = .error(error.localizedDescription)
             errorMessage = error.localizedDescription
@@ -78,6 +80,7 @@ final class AppViewModel {
     }
 
     func disconnect() async {
+        await heartbeatService.stop()
         if let client = apiClient {
             try? await authService.logout(client: client)
         }
