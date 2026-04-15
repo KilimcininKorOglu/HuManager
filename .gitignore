@@ -26,5 +26,8 @@ xcuserdata/
 Packages/
 Package.resolved
 
+# Generated Xcode project (regenerated via xcodegen)
+*.xcodeproj/
+
 # Helper projects (reference only, not part of build)
 helper-projects/

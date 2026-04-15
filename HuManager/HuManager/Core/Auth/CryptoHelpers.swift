@@ -12,6 +12,10 @@ enum CryptoHelpers {
         return Data(hash)
     }
 
+    static func sha256Data(_ data: Data) -> Data {
+        Data(SHA256.hash(data: data))
+    }
+
     static func sha256Hex(_ string: String) -> String {
         sha256(string).hexString
     }

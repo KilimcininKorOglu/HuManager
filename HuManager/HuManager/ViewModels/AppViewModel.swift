@@ -46,6 +46,8 @@ final class AppViewModel {
     var password: String = ""
 
     private(set) var apiClient: HuaweiAPIClient?
+    private(set) var webUIVersion: WebUIVersion?
+    private let authService = AuthService()
 
     var isConnected: Bool {
         if case .connected = connectionState { return true }
@@ -54,22 +56,33 @@ final class AppViewModel {
 
     func connect() async {
         connectionState = .connecting
+        errorMessage = nil
 
         let client = HuaweiAPIClient(host: modemIP)
         apiClient = client
 
         do {
-            let _ = try await client.get(Endpoints.stateLogin)
+            let result = try await authService.login(
+                client: client,
+                username: username,
+                password: password
+            )
+            webUIVersion = result.version
             connectionState = .connected
         } catch {
             connectionState = .error(error.localizedDescription)
             errorMessage = error.localizedDescription
             showError = true
+            apiClient = nil
         }
     }
 
-    func disconnect() {
+    func disconnect() async {
+        if let client = apiClient {
+            try? await authService.logout(client: client)
+        }
         apiClient = nil
+        webUIVersion = nil
         connectionState = .disconnected
     }
 }
