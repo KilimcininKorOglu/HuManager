@@ -11,6 +11,18 @@ struct ContentView: View {
                 } detail: {
                     detailView
                 }
+                .toolbar {
+                    ToolbarItem(placement: .automatic) {
+                        StatusBarView(
+                            connectionState: appVM.connectionState,
+                            webUIVersion: appVM.webUIVersion,
+                            modemIP: appVM.modemIP,
+                            onDisconnect: {
+                                Task { await appVM.disconnect() }
+                            }
+                        )
+                    }
+                }
             } else {
                 LoginView(appVM: appVM)
             }
