@@ -35,23 +35,14 @@ struct ContentView: View {
             case .sms:
                 SMSView(client: client)
             case .network:
-                placeholderView("Ağ Modu", "Faz 4")
+                BandLockView(client: client)
             case .traffic:
-                placeholderView("Trafik İstatistikleri", "Faz 6")
+                TrafficView(client: client)
             case .wifi:
-                placeholderView("WiFi Yönetimi", "Faz 6")
+                WiFiSettingsView(client: client)
             case .device:
-                placeholderView("Cihaz Bilgisi", "Faz 6")
+                DeviceInfoView(client: client)
             }
-        }
-    }
-
-    private func placeholderView(_ title: String, _ phase: String) -> some View {
-        VStack(spacing: 8) {
-            Text(title)
-                .font(.title2)
-            Text("\(phase)'te gelecek")
-                .foregroundStyle(.secondary)
         }
     }
 }
