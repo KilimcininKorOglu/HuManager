@@ -26,7 +26,8 @@ final class SCRAMAuthProvider: Sendable {
         let (challengeData, _) = try await client.postForLogin(
             Endpoints.challengeLogin,
             body: challengeBody,
-            token: token
+            token: token,
+            sendCookies: true
         )
 
         let challengeResponse = try XMLResponseParser.parseResponse(data: challengeData)
@@ -52,6 +53,9 @@ final class SCRAMAuthProvider: Sendable {
         )
 
         // Step 4: Authentication request
+        // Use token from challenge response header (rotated by modem)
+        let authToken = await client.session.peekToken ?? token
+
         let authBody = XMLRequestBuilder.buildOrdered(elements: [
             ("clientproof", clientProofHex),
             ("finalnonce", serverNonce)
@@ -60,7 +64,8 @@ final class SCRAMAuthProvider: Sendable {
         let (authData, _) = try await client.postForLogin(
             Endpoints.authenticationLogin,
             body: authBody,
-            token: token
+            token: authToken,
+            sendCookies: true
         )
 
         let _ = try XMLResponseParser.parseResponse(data: authData)

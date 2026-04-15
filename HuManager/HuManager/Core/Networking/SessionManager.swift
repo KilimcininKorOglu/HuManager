@@ -33,6 +33,17 @@ actor SessionManager {
     }
 
     func processResponseHeaders(_ response: HTTPURLResponse) {
+        #if DEBUG
+        let allHeaders = response.allHeaderFields
+        print("[DEBUG HEADERS] URL: \(response.url?.path ?? "?") | Status: \(response.statusCode)")
+        for (key, value) in allHeaders {
+            let k = "\(key)"
+            if k.lowercased().contains("cookie") || k.lowercased().contains("token") || k.lowercased().contains("session") {
+                print("  \(k): \(value)")
+            }
+        }
+        #endif
+
         // Token rotation from response headers
         if let tokenHeader = response.value(forHTTPHeaderField: "__RequestVerificationToken") {
             let parts = tokenHeader.split(separator: "#").map(String.init).filter { !$0.isEmpty }
@@ -42,7 +53,9 @@ actor SessionManager {
             } else if parts.count == 1 {
                 tokens.append(parts[0])
             }
-            logger.debug("Token güncellendi, yığın: \(self.tokens.count)")
+            #if DEBUG
+            print("[DEBUG] Token stack updated: \(tokens.count) tokens")
+            #endif
         }
 
         // Extract SessionID using HTTPCookie parser (handles multiple Set-Cookie headers)
@@ -50,9 +63,17 @@ actor SessionManager {
         let headerFields = response.allHeaderFields as? [String: String] ?? [:]
         let cookies = HTTPCookie.cookies(withResponseHeaderFields: headerFields, for: url)
 
+        #if DEBUG
+        if !cookies.isEmpty {
+            print("[DEBUG] Cookies parsed: \(cookies.map { "\($0.name)=\($0.value.prefix(12))..." })")
+        }
+        #endif
+
         for cookie in cookies where cookie.name == "SessionID" {
             sessionId = cookie.value
-            logger.debug("SessionID güncellendi: \(cookie.value.prefix(8))...")
+            #if DEBUG
+            print("[DEBUG] SessionID set: \(cookie.value.prefix(16))...")
+            #endif
             break
         }
     }

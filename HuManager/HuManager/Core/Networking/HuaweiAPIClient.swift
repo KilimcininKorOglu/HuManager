@@ -38,6 +38,11 @@ final class HuaweiAPIClient: Sendable {
         let (data, response) = try await performRequest(request)
         await processResponse(response)
 
+        #if DEBUG
+        let bodyPreview = String(data: data, encoding: .utf8)?.prefix(200) ?? "nil"
+        print("[DEBUG GET] \(endpoint) → \(bodyPreview)")
+        #endif
+
         return try XMLResponseParser.parseResponse(data: data)
     }
 
@@ -84,6 +89,11 @@ final class HuaweiAPIClient: Sendable {
         let (data, response) = try await performRequest(request)
         await processResponse(response)
 
+        #if DEBUG
+        let bodyPreview = String(data: data, encoding: .utf8)?.prefix(200) ?? "nil"
+        print("[DEBUG POST] \(endpoint) → \(bodyPreview)")
+        #endif
+
         return try XMLResponseParser.parseResponse(data: data)
     }
 
@@ -114,6 +124,12 @@ final class HuaweiAPIClient: Sendable {
 
         let (data, response) = try await performRequest(request)
         await processResponse(response)
+
+        #if DEBUG
+        let bodyPreview = String(data: data, encoding: .utf8)?.prefix(300) ?? "nil"
+        let cookieInfo = sendCookies ? "cookies=yes" : "cookies=no"
+        print("[DEBUG POST-LOGIN] \(endpoint) [\(cookieInfo)] → \(bodyPreview)")
+        #endif
 
         return (data, response)
     }
