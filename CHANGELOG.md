@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.2] - 2026-04-16
+
+### Added
+- Menu bar status panel showing signal, network type, and band via MenuBarExtra scene
+- Remember Me toggle on login screen to persist credentials across launches
+
+### Changed
+- GitHub Actions workflow for build and test on macos-15
+- Refresh README with menu bar, remember me, CI section, and Turkish market name (Vodafone Redbox 5G) for H153-381
+
+### Fixed
+- Route month statistics through DeviceService to satisfy Swift 6 sendability on CI
+
 ## [0.1.1] - 2026-04-16
 
 ### Added
