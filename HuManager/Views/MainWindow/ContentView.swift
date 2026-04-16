@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Bindable var appVM: AppViewModel
+    @Environment(\.localization) private var lang
 
     var body: some View {
         Group {
@@ -22,15 +23,18 @@ struct ContentView: View {
                             }
                         )
                     }
+                    ToolbarItem(placement: .automatic) {
+                        LanguagePicker()
+                    }
                 }
             } else {
                 LoginView(appVM: appVM)
             }
         }
-        .alert("Hata", isPresented: $appVM.showError) {
-            Button("Tamam", role: .cancel) {}
+        .alert(lang.t(L.general.error), isPresented: $appVM.showError) {
+            Button(lang.t(L.general.ok), role: .cancel) {}
         } message: {
-            Text(appVM.errorMessage ?? "Bilinmeyen hata")
+            Text(appVM.errorMessage ?? lang.t(L.general.unknownError))
         }
     }
 

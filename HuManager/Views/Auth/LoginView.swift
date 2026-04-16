@@ -2,31 +2,38 @@ import SwiftUI
 
 struct LoginView: View {
     @Bindable var appVM: AppViewModel
+    @Environment(\.localization) private var lang
     @State private var isConnecting = false
 
     var body: some View {
         VStack(spacing: 32) {
+            HStack {
+                Spacer()
+                LanguagePicker()
+            }
+            .padding(.top, 8)
+
             Spacer()
 
             VStack(spacing: 8) {
                 Image(systemName: "antenna.radiowaves.left.and.right")
                     .font(.system(size: 48))
                     .foregroundStyle(.blue)
-                Text("HuManager")
+                Text(lang.t(L.general.appName))
                     .font(.largeTitle.bold())
-                Text("Huawei Modem Yönetimi")
+                Text(lang.t(L.general.appSubtitle))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
 
             VStack(spacing: 16) {
-                TextField("Modem IP Adresi", text: $appVM.modemIP)
+                TextField(lang.t(L.login.modemIP), text: $appVM.modemIP)
                     .textFieldStyle(.roundedBorder)
 
-                TextField("Kullanıcı Adı", text: $appVM.username)
+                TextField(lang.t(L.login.username), text: $appVM.username)
                     .textFieldStyle(.roundedBorder)
 
-                SecureField("Şifre", text: $appVM.password)
+                SecureField(lang.t(L.login.password), text: $appVM.password)
                     .textFieldStyle(.roundedBorder)
                     .onSubmit { connectAction() }
             }
@@ -38,7 +45,7 @@ struct LoginView: View {
                         ProgressView()
                             .controlSize(.small)
                     }
-                    Text(isConnecting ? "Bağlanıyor..." : "Bağlan")
+                    Text(isConnecting ? lang.t(L.general.connecting) : lang.t(L.general.connect))
                 }
                 .frame(maxWidth: 300)
             }

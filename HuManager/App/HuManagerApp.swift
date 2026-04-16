@@ -7,6 +7,7 @@ struct HuManagerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(appVM: appViewModel)
+                .environment(\.localization, LocalizationManager.shared)
                 .frame(minWidth: 900, minHeight: 600)
         }
         .windowStyle(.titleBar)
