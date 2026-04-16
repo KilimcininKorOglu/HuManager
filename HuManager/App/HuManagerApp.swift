@@ -12,5 +12,13 @@ struct HuManagerApp: App {
         }
         .windowStyle(.titleBar)
         .defaultSize(width: 1100, height: 700)
+
+        MenuBarExtra {
+            MenuBarPanel(appVM: appViewModel)
+                .environment(\.localization, LocalizationManager.shared)
+        } label: {
+            Image(systemName: "antenna.radiowaves.left.and.right")
+        }
+        .menuBarExtraStyle(.window)
     }
 }
