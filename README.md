@@ -2,6 +2,8 @@
 
 Native macOS application for managing Huawei HiLink mobile modems. Built with SwiftUI, targeting macOS 14+ (Sonoma). Zero third-party dependencies.
 
+Current version: **0.1.1** &middot; License: [MIT](LICENSE)
+
 ## Features
 
 - **Dashboard** -- Overview cards showing signal quality, network info, traffic stats, and device status
@@ -11,6 +13,8 @@ Native macOS application for managing Huawei HiLink mobile modems. Built with Sw
 - **Traffic Statistics** -- Session/total/monthly data usage with live rate polling
 - **WiFi Settings** -- SSID, security config, and connected devices table
 - **Device Control** -- IMEI/serial/firmware display, reboot control
+- **Menu Bar Panel** -- Compact status panel in the macOS menu bar showing signal, network type, and band while the main window is closed
+- **Remember Me** -- Optional credential persistence (modem IP, username, password) with a language picker on the login screen
 - **Localization** -- 15 languages with instant switching (no restart required)
 
 ## Supported Languages
@@ -21,7 +25,7 @@ System language is auto-detected on first launch.
 
 ## Supported Devices
 
-Compatible with all Huawei HiLink modems (4G and 5G):
+Compatible with Huawei HiLink modems (4G and 5G):
 
 | Type   | Example Models     | Auth Method           |
 |--------|--------------------|-----------------------|
@@ -30,7 +34,7 @@ Compatible with all Huawei HiLink modems (4G and 5G):
 | MiFi   | E5787, E5885       | SCRAM (WebUI v10)     |
 | Wingle | E8372              | SHA256 (WebUI v17)    |
 
-WebUI version is detected automatically at connection time.
+WebUI version is detected automatically at connection time. Tested on H153-381 (5G CPE, WebUI v10, SCRAM) — sold in Turkey as **Vodafone Redbox 5G**.
 
 ## Requirements
 
@@ -43,10 +47,10 @@ No third-party Swift dependencies.
 ## Build
 
 ```bash
-git clone <repo-url>
-cd huawei
+git clone https://github.com/KilimcininKorOglu/HuManager.git
+cd HuManager
 
-# Generate Xcode project (project.yml is at repo root)
+# Generate Xcode project (run from repo root, not from HuManager/ subdir)
 xcodegen generate
 
 # Build from command line
@@ -56,19 +60,24 @@ xcodebuild -scheme HuManager -destination 'platform=macOS' build
 open HuManager.xcodeproj
 ```
 
+### Continuous Integration
+
+Every push and pull request to `main` triggers `.github/workflows/ci.yml` on `macos-15`: xcodegen is installed, the project is regenerated, then build and tests run. Xcode 16.4 on CI enforces stricter Swift 6 sendability than local Xcode, so Sendable-only service return types are required.
+
 ## Usage
 
 1. Launch HuManager
-2. Enter modem IP address (default: `192.168.8.1`), username (`admin`), and password
+2. Enter modem IP address (default: `192.168.8.1`), username (`admin`), and password. Toggle **Remember Me** to persist credentials across launches.
 3. Select your preferred language from the picker on the login screen
 4. Click Connect -- the app auto-detects WebUI version and authenticates
 5. Navigate features via the sidebar (8 tabs: Dashboard, Signal, Bands, SMS, Network, Traffic, WiFi, Device)
+6. Close the main window to keep HuManager running in the macOS menu bar — click the antenna icon for a quick status panel
 
 ## Architecture
 
 ```
 HuManager/
-  App/                  Entry point (@main)
+  App/                  Entry point (@main), main window + MenuBarExtra scene
   Core/
     Auth/               Authentication (SHA256 + SCRAM), WebUI version detection
     Localization/       Type-safe L enum keys, per-language translation files
@@ -76,8 +85,9 @@ HuManager/
     Networking/         HTTP client, session/token management, XML parser
     Utilities/          Band mask calculation, signal quality mapping, formatters
   Services/             Domain API wrappers (Device, Band, SMS, WiFi, Polling, Heartbeat)
-  ViewModels/           @MainActor @Observable state management per feature
-  Views/                SwiftUI interface organized by feature
+  ViewModels/           @MainActor @Observable state (AppViewModel is the root)
+  Views/                SwiftUI views by feature: Auth, Dashboard, Signal, BandLock,
+                        SMS, Network, Traffic, WiFi, Device, MenuBar, MainWindow, Shared
 ```
 
 ### Modem API
