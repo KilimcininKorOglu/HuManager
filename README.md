@@ -16,12 +16,12 @@ Native macOS application for managing Huawei HiLink mobile modems. Built with Sw
 
 Compatible with all Huawei HiLink modems (4G and 5G):
 
-| Type   | Example Models     | Auth Method           |
-|--------|--------------------|-----------------------|
-| 5G CPE | H153-381, H155-381 | SCRAM (WebUI v10)     |
-| 4G CPE | B535, B618         | SHA256 (WebUI v17/21) |
-| MiFi   | E5787, E5885       | SCRAM (WebUI v10)     |
-| Wingle | E8372              | SHA256 (WebUI v17)    |
+| Type       | Example Models          | Auth Method           |
+|------------|-------------------------|-----------------------|
+| 5G CPE     | H153-381, H155-381      | SCRAM (WebUI v10)     |
+| 4G CPE     | B535, B618              | SHA256 (WebUI v17/21) |
+| MiFi       | E5787, E5885            | SCRAM (WebUI v10)     |
+| Wingle     | E8372                   | SHA256 (WebUI v17)    |
 
 WebUI version is detected automatically at connection time.
 
@@ -37,9 +37,9 @@ No third-party Swift dependencies.
 
 ```bash
 git clone <repo-url>
-cd HuManager
+cd huawei
 
-# Generate Xcode project
+# Generate Xcode project (project.yml is at repo root)
 xcodegen generate
 
 # Build from command line
