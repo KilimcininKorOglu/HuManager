@@ -13,8 +13,15 @@ final class LocalizationManager: @unchecked Sendable {
     }
 
     private init() {
-        let saved = UserDefaults.standard.string(forKey: "app_language") ?? "tr"
-        currentLanguage = Language(rawValue: saved) ?? .turkish
+        if let saved = UserDefaults.standard.string(forKey: "app_language"),
+           let language = Language(rawValue: saved) {
+            currentLanguage = language
+        } else {
+            let systemCode = Locale.current.language.languageCode?.identifier ?? "en"
+            let detected = Language(rawValue: systemCode) ?? .english
+            currentLanguage = detected
+            UserDefaults.standard.set(detected.rawValue, forKey: "app_language")
+        }
     }
 
     func t(_ key: String) -> String {
