@@ -50,7 +50,7 @@ extension Translations {
         "signal.rsrpHistory": "RSRP Geschiedenis",
         "signal.sinrHistory": "SINR Geschiedenis",
         "signal.waiting": "Wachten op signaalgegevens...",
-        "signal.clearHistory": "Geschiedenis Wissen",
+        "signal.clearHistory": "Geschiedenis wissen",
         "band.title": "Bandvergrendeling",
         "band.activeBand": "Actieve Band",
         "band.networkMode": "Netwerkmodus",
