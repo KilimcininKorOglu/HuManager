@@ -30,6 +30,7 @@ extension Translations {
         "login.modemIP": "Modem IP Address",
         "login.username": "Username",
         "login.password": "Password",
+        "login.rememberMe": "Remember Me",
 
         // Sidebar
         "sidebar.dashboard": "Dashboard",

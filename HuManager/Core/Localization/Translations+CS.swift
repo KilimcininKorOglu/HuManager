@@ -30,6 +30,7 @@ extension Translations {
         "login.modemIP": "IP adresa modemu",
         "login.username": "Uživatelské jméno",
         "login.password": "Heslo",
+        "login.rememberMe": "Zapamatovat si mě",
 
         // Sidebar
         "sidebar.dashboard": "Přehled",

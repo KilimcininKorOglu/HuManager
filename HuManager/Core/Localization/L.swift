@@ -32,6 +32,7 @@ enum L {
         static let modemIP = "login.modemIP"
         static let username = "login.username"
         static let password = "login.password"
+        static let rememberMe = "login.rememberMe"
     }
 
     enum sidebar {

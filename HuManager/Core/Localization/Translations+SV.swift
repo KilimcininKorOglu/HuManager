@@ -27,6 +27,7 @@ extension Translations {
         "login.modemIP": "Modemets IP-adress",
         "login.username": "Användarnamn",
         "login.password": "Lösenord",
+        "login.rememberMe": "Kom ihåg mig",
         "sidebar.dashboard": "Översikt",
         "sidebar.signal": "Signal",
         "sidebar.bands": "Bandlås",

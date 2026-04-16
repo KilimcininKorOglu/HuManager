@@ -27,6 +27,7 @@ extension Translations {
         "login.modemIP": "Adresse IP du modem",
         "login.username": "Nom d'utilisateur",
         "login.password": "Mot de passe",
+        "login.rememberMe": "Se souvenir de moi",
         "sidebar.dashboard": "Tableau de bord",
         "sidebar.signal": "Signal",
         "sidebar.bands": "Verrouillage de bande",

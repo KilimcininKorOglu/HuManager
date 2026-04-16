@@ -57,11 +57,28 @@ final class AppViewModel {
     var modemIP: String = "192.168.8.1"
     var username: String = "admin"
     var password: String = ""
+    var rememberMe: Bool = false
 
     private(set) var apiClient: HuaweiAPIClient?
     private(set) var webUIVersion: WebUIVersion?
     private let authService = AuthService()
     private let heartbeatService = HeartbeatService()
+
+    private static let kRememberMe = "login.rememberMe"
+    private static let kModemIP = "login.modemIP"
+    private static let kUsername = "login.username"
+    private static let kPassword = "login.password"
+
+    init() {
+        let defaults = UserDefaults.standard
+        let saved = defaults.bool(forKey: Self.kRememberMe)
+        rememberMe = saved
+        if saved {
+            modemIP = defaults.string(forKey: Self.kModemIP) ?? "192.168.8.1"
+            username = defaults.string(forKey: Self.kUsername) ?? "admin"
+            password = defaults.string(forKey: Self.kPassword) ?? ""
+        }
+    }
 
     var isConnected: Bool {
         if case .connected = connectionState { return true }
@@ -83,12 +100,27 @@ final class AppViewModel {
             )
             webUIVersion = result.version
             connectionState = .connected
+            saveCredentials()
             await heartbeatService.start(client: client)
         } catch {
             connectionState = .error(error.localizedDescription)
             errorMessage = error.localizedDescription
             showError = true
             apiClient = nil
+        }
+    }
+
+    private func saveCredentials() {
+        let defaults = UserDefaults.standard
+        defaults.set(rememberMe, forKey: Self.kRememberMe)
+        if rememberMe {
+            defaults.set(modemIP, forKey: Self.kModemIP)
+            defaults.set(username, forKey: Self.kUsername)
+            defaults.set(password, forKey: Self.kPassword)
+        } else {
+            defaults.removeObject(forKey: Self.kModemIP)
+            defaults.removeObject(forKey: Self.kUsername)
+            defaults.removeObject(forKey: Self.kPassword)
         }
     }
 

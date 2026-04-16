@@ -30,6 +30,7 @@ extension Translations {
         "login.modemIP": "Modem IP-cím",
         "login.username": "Felhasználónév",
         "login.password": "Jelszó",
+        "login.rememberMe": "Emlékezz rám",
 
         // Sidebar
         "sidebar.dashboard": "Áttekintés",

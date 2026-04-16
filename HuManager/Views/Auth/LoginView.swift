@@ -39,6 +39,10 @@ struct LoginView: View {
             }
             .frame(maxWidth: 300)
 
+            Toggle(lang.t(L.login.rememberMe), isOn: $appVM.rememberMe)
+                .toggleStyle(.checkbox)
+                .frame(maxWidth: 300, alignment: .leading)
+
             Button(action: connectAction) {
                 HStack(spacing: 8) {
                     if isConnecting {

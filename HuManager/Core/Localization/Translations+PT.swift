@@ -27,6 +27,7 @@ extension Translations {
         "login.modemIP": "Endereço IP do Modem",
         "login.username": "Utilizador",
         "login.password": "Palavra-passe",
+        "login.rememberMe": "Lembrar-me",
         "sidebar.dashboard": "Painel",
         "sidebar.signal": "Sinal",
         "sidebar.bands": "Bloqueio de Banda",

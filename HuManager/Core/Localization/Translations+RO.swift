@@ -30,6 +30,7 @@ extension Translations {
         "login.modemIP": "Adresa IP a modemului",
         "login.username": "Utilizator",
         "login.password": "Parolă",
+        "login.rememberMe": "Ține-mă minte",
 
         // Sidebar
         "sidebar.dashboard": "Panou",

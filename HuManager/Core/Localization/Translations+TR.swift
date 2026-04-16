@@ -30,6 +30,7 @@ extension Translations {
         "login.modemIP": "Modem IP Adresi",
         "login.username": "Kullanıcı Adı",
         "login.password": "Şifre",
+        "login.rememberMe": "Beni Hatırla",
 
         // Sidebar
         "sidebar.dashboard": "Gösterge Paneli",

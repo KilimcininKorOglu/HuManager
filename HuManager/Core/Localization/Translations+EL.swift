@@ -30,6 +30,7 @@ extension Translations {
         "login.modemIP": "Διεύθυνση IP μόντεμ",
         "login.username": "Όνομα χρήστη",
         "login.password": "Κωδικός",
+        "login.rememberMe": "Να με θυμάσαι",
 
         // Sidebar
         "sidebar.dashboard": "Πίνακας",
