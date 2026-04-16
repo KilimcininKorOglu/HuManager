@@ -36,7 +36,7 @@ final class SMSService: Sendable {
     func sendSMS(client: HuaweiAPIClient, phone: String, content: String) async throws {
         let body = XMLRequestBuilder.buildSMS(phones: [phone], content: content)
         _ = try await client.post(Endpoints.sendSMS, body: body)
-        logger.info("SMS gönderildi: \(phone)")
+        logger.info("SMS sent: \(phone)")
     }
 
     func deleteSMS(client: HuaweiAPIClient, index: String) async throws {

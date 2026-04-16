@@ -42,7 +42,7 @@ final class BandService: Sendable {
 
         let body = XMLRequestBuilder.buildOrdered(elements: elements)
         _ = try await client.post(Endpoints.netMode, body: body)
-        logger.info("Band kilidi uygulandı: LTE=\(lteBand), mode=\(networkMode)")
+        logger.info("Band lock applied: LTE=\(lteBand), mode=\(networkMode)")
     }
 
     func resetToAuto(client: HuaweiAPIClient) async throws {
@@ -51,6 +51,6 @@ final class BandService: Sendable {
             networkMode: "00",
             lteBand: "7FFFFFFFFFFFFFFF"
         )
-        logger.info("Band kilidi sıfırlandı (otomatik)")
+        logger.info("Band lock reset (auto)")
     }
 }

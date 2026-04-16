@@ -22,21 +22,21 @@ actor HeartbeatService {
                 do {
                     _ = try await client.get(Endpoints.stateLogin)
                 } catch {
-                    await self?.logger.warning("Heartbeat hatası: \(error.localizedDescription)")
+                    await self?.logger.warning("Heartbeat error: \(error.localizedDescription)")
                 }
             }
 
             await self?.setRunningState(false)
         }
 
-        logger.info("Heartbeat başlatıldı (\(self.interval)sn aralık)")
+        logger.info("Heartbeat started (\(self.interval)s interval)")
     }
 
     func stop() {
         heartbeatTask?.cancel()
         heartbeatTask = nil
         isRunning = false
-        logger.info("Heartbeat durduruldu")
+        logger.info("Heartbeat stopped")
     }
 
     private func setRunningState(_ value: Bool) {

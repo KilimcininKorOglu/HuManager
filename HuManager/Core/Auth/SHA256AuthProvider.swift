@@ -19,7 +19,7 @@ final class SHA256AuthProvider: Sendable {
         let combined = username + passwordHash + token
         let loginValue = CryptoHelpers.sha256Base64Hex(combined)
 
-        logger.debug("SHA256 login hazırlanıyor: user=\(username), passwordType=\(passwordType)")
+        logger.debug("Preparing SHA256 login: user=\(username), passwordType=\(passwordType)")
 
         // Step 3: Build XML body
         let body = XMLRequestBuilder.buildOrdered(elements: [
@@ -37,7 +37,7 @@ final class SHA256AuthProvider: Sendable {
 
         // Step 5: Parse response
         let parsed = try XMLResponseParser.parseResponse(data: data)
-        logger.info("SHA256 login başarılı")
+        logger.info("SHA256 login successful")
 
         await client.session.setLoggedIn(true)
     }

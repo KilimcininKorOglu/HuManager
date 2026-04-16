@@ -11,7 +11,7 @@ actor SessionManager {
 
     var currentToken: String? {
         if tokens.isEmpty {
-            logger.warning("Token yığını boş — yeniden giriş gerekli")
+            logger.warning("Token stack empty — re-login required")
             return nil
         }
         return tokens.removeLast()
@@ -29,7 +29,7 @@ actor SessionManager {
 
     func setInitialToken(_ token: String) {
         tokens = [token]
-        logger.debug("İlk token ayarlandı")
+        logger.debug("Initial token set")
     }
 
     func processResponseHeaders(_ response: HTTPURLResponse) {
@@ -90,7 +90,7 @@ actor SessionManager {
         sessionId = nil
         tokens = []
         isLoggedIn = false
-        logger.info("Oturum sıfırlandı")
+        logger.info("Session reset")
     }
 
     // MARK: - Cookie Builder

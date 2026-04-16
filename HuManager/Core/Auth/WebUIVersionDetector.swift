@@ -27,7 +27,7 @@ final class WebUIVersionDetector: Sendable {
             return result
         }
 
-        throw HuaweiAPIError.authenticationFailed(reason: "WebUI versiyonu algılanamadı")
+        throw HuaweiAPIError.authenticationFailed(reason: "Failed to detect WebUI version")
     }
 
     // MARK: - Token API (v10/v21)
@@ -37,7 +37,7 @@ final class WebUIVersionDetector: Sendable {
             let response = try await client.get(Endpoints.webserverToken)
 
             guard let fullToken = response["token"] as? String, !fullToken.isEmpty else {
-                logger.info("Token API yanıt verdi ama token boş")
+                logger.info("Token API responded but token is empty")
                 return nil
             }
 
@@ -46,7 +46,7 @@ final class WebUIVersionDetector: Sendable {
             let startIndex = fullToken.index(fullToken.startIndex, offsetBy: max(0, tokenLength - 32))
             let token = String(fullToken[startIndex...])
 
-            logger.info("Token API'den token alındı, v10 varsayılan")
+            logger.info("Token received from Token API, assuming v10")
 
             // Check if v21
             if let version = try await checkForV21(client: client) {
@@ -55,7 +55,7 @@ final class WebUIVersionDetector: Sendable {
 
             return WebUIDetectionResult(version: .v10, token: token)
         } catch {
-            logger.info("Token API erişilemedi: \(error.localizedDescription)")
+            logger.info("Token API unreachable: \(error.localizedDescription)")
             return nil
         }
     }
@@ -66,11 +66,11 @@ final class WebUIVersionDetector: Sendable {
 
             if let webUIVersion = basicInfo["WebUIVersion"] as? String,
                webUIVersion.contains("21.") {
-                logger.info("WebUI v21 algılandı: \(webUIVersion)")
+                logger.info("WebUI v21 detected: \(webUIVersion)")
                 return .v21
             }
         } catch {
-            logger.debug("basic_information endpoint erişilemedi")
+            logger.debug("basic_information endpoint unreachable")
         }
         return nil
     }
@@ -82,14 +82,14 @@ final class WebUIVersionDetector: Sendable {
             let html = try await client.getHTML(Endpoints.homeHTML)
 
             guard let token = extractCSRFToken(from: html) else {
-                logger.warning("HTML'de csrf_token bulunamadı")
+                logger.warning("csrf_token not found in HTML")
                 return nil
             }
 
-            logger.info("HTML meta tag'den token alındı, v17")
+            logger.info("Token extracted from HTML meta tag, v17")
             return WebUIDetectionResult(version: .v17, token: token)
         } catch {
-            logger.info("HTML endpoint erişilemedi: \(error.localizedDescription)")
+            logger.info("HTML endpoint unreachable: \(error.localizedDescription)")
             return nil
         }
     }

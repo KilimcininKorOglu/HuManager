@@ -33,6 +33,6 @@ final class DeviceService: Sendable {
     func reboot(client: HuaweiAPIClient) async throws {
         let body = XMLRequestBuilder.buildOrdered(elements: [("Control", "1")])
         _ = try await client.post(Endpoints.deviceControl, body: body)
-        logger.info("Modem yeniden başlatma komutu gönderildi")
+        logger.info("Modem reboot command sent")
     }
 }

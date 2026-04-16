@@ -22,17 +22,17 @@ final class AuthService: Sendable {
         await client.session.reset()
 
         // Step 1: Initialize session — GET root to establish SessionID cookie
-        logger.info("Oturum başlatılıyor...")
+        logger.info("Starting session...")
         do {
             let _ = try await client.getRaw("/")
         } catch {
-            logger.debug("Root GET hatası (beklenen olabilir): \(error.localizedDescription)")
+            logger.debug("Root GET error (may be expected): \(error.localizedDescription)")
         }
 
         // Step 2: Detect WebUI version and extract initial token
-        logger.info("WebUI versiyonu algılanıyor...")
+        logger.info("Detecting WebUI version...")
         let detection = try await versionDetector.detect(using: client)
-        logger.info("WebUI v\(detection.version.rawValue) algılandı")
+        logger.info("WebUI v\(detection.version.rawValue) detected")
 
         // Step 3: Set initial token
         await client.session.setInitialToken(detection.token)
@@ -44,7 +44,7 @@ final class AuthService: Sendable {
         // Step 5: Dispatch to appropriate auth provider
         switch detection.version {
         case .v17, .v21:
-            logger.info("SHA256 auth kullanılıyor (v\(detection.version.rawValue))")
+            logger.info("Using SHA256 auth (v\(detection.version.rawValue))")
             try await sha256Provider.login(
                 client: client,
                 username: username,
@@ -54,7 +54,7 @@ final class AuthService: Sendable {
             )
 
         case .v10:
-            logger.info("SCRAM auth kullanılıyor (v10)")
+            logger.info("Using SCRAM auth (v10)")
             // v10: re-fetch token right before login (as per Python reference)
             let freshToken = await refreshTokenForV10(client: client) ?? detection.token
             await client.session.setInitialToken(freshToken)
@@ -78,7 +78,7 @@ final class AuthService: Sendable {
         ])
         _ = try await client.post(Endpoints.logout, body: body)
         await client.session.reset()
-        logger.info("Oturumdan çıkış yapıldı")
+        logger.info("Logged out")
     }
 
     // MARK: - Private Helpers
@@ -88,7 +88,7 @@ final class AuthService: Sendable {
             let response = try await client.get(Endpoints.stateLogin)
             return response["password_type"] as? String ?? "4"
         } catch {
-            logger.debug("state-login alınamadı, varsayılan password_type=4")
+            logger.debug("state-login failed, defaulting to password_type=4")
             return "4"
         }
     }
@@ -101,7 +101,7 @@ final class AuthService: Sendable {
                 return String(fullToken[start...])
             }
         } catch {
-            logger.debug("v10 token yenilenirken hata: \(error.localizedDescription)")
+            logger.debug("v10 token refresh error: \(error.localizedDescription)")
         }
         return nil
     }
@@ -119,9 +119,9 @@ final class AuthService: Sendable {
                 await client.session.setInitialToken(token)
             }
 
-            logger.debug("Session token yenilendi")
+            logger.debug("Session token refreshed")
         } catch {
-            logger.warning("SesTokInfo alınamadı, mevcut token ile devam ediliyor")
+            logger.warning("SesTokInfo failed, continuing with current token")
         }
     }
 }

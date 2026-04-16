@@ -68,7 +68,7 @@ final class HuaweiAPIClient: Sendable {
         await processResponse(response)
 
         guard let html = String(data: data, encoding: .utf8) else {
-            throw HuaweiAPIError.xmlParsingFailed(raw: "UTF-8 dönüştürme hatası")
+            throw HuaweiAPIError.xmlParsingFailed(raw: "UTF-8 conversion error")
         }
         return html
     }
@@ -155,7 +155,7 @@ final class HuaweiAPIClient: Sendable {
             let (data, response) = try await urlSession.data(for: request)
 
             guard let httpResponse = response as? HTTPURLResponse else {
-                throw HuaweiAPIError.connectionFailed(underlying: "HTTP yanıtı alınamadı")
+                throw HuaweiAPIError.connectionFailed(underlying: "No HTTP response received")
             }
 
             guard httpResponse.statusCode == 200 else {

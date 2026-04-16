@@ -14,7 +14,7 @@ final class SCRAMAuthProvider: Sendable {
         // Step 1: Generate client nonce (64 hex chars)
         let clientNonce = CryptoHelpers.generateNonce(byteCount: 32)
 
-        logger.debug("SCRAM challenge başlatılıyor: user=\(username)")
+        logger.debug("Starting SCRAM challenge: user=\(username)")
 
         // Step 2: Challenge request
         let challengeBody = XMLRequestBuilder.buildOrdered(elements: [
@@ -37,11 +37,11 @@ final class SCRAMAuthProvider: Sendable {
               let iterationsStr = challengeResponse["iterations"] as? String,
               let iterations = Int(iterationsStr) else {
             throw HuaweiAPIError.authenticationFailed(
-                reason: "SCRAM challenge yanıtı eksik: salt, servernonce veya iterations bulunamadı"
+                reason: "SCRAM challenge response incomplete: salt, servernonce or iterations missing"
             )
         }
 
-        logger.debug("SCRAM challenge alındı: iterations=\(iterations)")
+        logger.debug("SCRAM challenge received: iterations=\(iterations)")
 
         // Step 3: Derive authentication proof
         let clientProofHex = try computeClientProof(
@@ -69,7 +69,7 @@ final class SCRAMAuthProvider: Sendable {
         )
 
         let _ = try XMLResponseParser.parseResponse(data: authData)
-        logger.info("SCRAM login başarılı")
+        logger.info("SCRAM login successful")
 
         await client.session.setLoggedIn(true)
     }
@@ -85,7 +85,7 @@ final class SCRAMAuthProvider: Sendable {
     ) throws -> String {
         // salt is hex string, convert to bytes
         guard let saltData = Data(hexString: salt) else {
-            throw HuaweiAPIError.authenticationFailed(reason: "Salt hex formatı geçersiz")
+            throw HuaweiAPIError.authenticationFailed(reason: "Invalid salt hex format")
         }
 
         // msg = "clientNonce,serverNonce,serverNonce"
