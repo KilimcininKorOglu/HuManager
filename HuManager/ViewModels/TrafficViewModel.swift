@@ -17,8 +17,7 @@ final class TrafficViewModel {
 
         do {
             traffic = try await deviceService.getTrafficStatistics(client: client)
-            let monthResponse = try await client.get(Endpoints.monthStatistics)
-            monthStats = MonthStatistics(from: monthResponse)
+            monthStats = try await deviceService.getMonthStatistics(client: client)
         } catch {
             errorMessage = error.localizedDescription
         }

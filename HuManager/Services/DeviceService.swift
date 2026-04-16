@@ -30,6 +30,11 @@ final class DeviceService: Sendable {
         return TrafficStatistics(from: response)
     }
 
+    func getMonthStatistics(client: HuaweiAPIClient) async throws -> MonthStatistics {
+        let response = try await client.get(Endpoints.monthStatistics)
+        return MonthStatistics(from: response)
+    }
+
     func reboot(client: HuaweiAPIClient) async throws {
         let body = XMLRequestBuilder.buildOrdered(elements: [("Control", "1")])
         _ = try await client.post(Endpoints.deviceControl, body: body)
