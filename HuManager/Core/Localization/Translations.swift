@@ -11,5 +11,12 @@ enum Translations {
         .portuguese: portuguese,
         .dutch: dutch,
         .spanish: spanish,
+        .russian: russian,
+        .polish: polish,
+        .swedish: swedish,
+        .czech: czech,
+        .romanian: romanian,
+        .hungarian: hungarian,
+        .greek: greek,
     ]
 }
