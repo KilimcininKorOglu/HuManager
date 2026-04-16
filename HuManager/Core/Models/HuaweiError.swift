@@ -43,25 +43,26 @@ enum HuaweiAPIError: Error, LocalizedError, Sendable {
     case tokenExhausted
 
     var errorDescription: String? {
+        let lang = LocalizationManager.shared
         switch self {
         case .connectionFailed(let underlying):
-            return "Bağlantı hatası: \(underlying)"
+            return lang.t(L.errors.connectionFailed, underlying)
         case .xmlParsingFailed(let raw):
-            return "XML ayrıştırma hatası: \(raw.prefix(100))"
+            return lang.t(L.errors.xmlParseFailed, String(raw.prefix(100)))
         case .apiError(let code, let message):
-            return "API hatası [\(code.rawValue)]: \(message)"
+            return lang.t(L.errors.apiError, "\(code.rawValue)", message)
         case .unknownAPIError(let code, let message):
-            return "Bilinmeyen hata [\(code)]: \(message)"
+            return lang.t(L.errors.unknownApiError, "\(code)", message)
         case .sessionExpired:
-            return "Oturum süresi doldu"
+            return lang.t(L.errors.sessionExpired)
         case .authenticationFailed(let reason):
-            return "Kimlik doğrulama hatası: \(reason)"
+            return lang.t(L.errors.authFailed, reason)
         case .timeout:
-            return "Zaman aşımı"
+            return lang.t(L.errors.timeout)
         case .notConnected:
-            return "Modem bağlantısı yok"
+            return lang.t(L.errors.notConnected)
         case .tokenExhausted:
-            return "Token tükendi, yeniden giriş gerekli"
+            return lang.t(L.errors.tokenExhausted)
         }
     }
 }

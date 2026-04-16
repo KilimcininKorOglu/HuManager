@@ -3,11 +3,12 @@ import SwiftUI
 struct DashboardView: View {
     let client: HuaweiAPIClient
     @State private var vm = DashboardViewModel()
+    @Environment(\.localization) private var lang
 
     var body: some View {
         ScrollView {
             if vm.isLoading && vm.deviceInfo == nil {
-                ProgressView("Yükleniyor...")
+                ProgressView(lang.t(L.general.loading))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding(.top, 100)
             } else {
@@ -29,7 +30,7 @@ struct DashboardView: View {
                 .padding()
             }
         }
-        .navigationTitle("Gösterge Paneli")
+        .navigationTitle(lang.t(L.dashboard.title))
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button {

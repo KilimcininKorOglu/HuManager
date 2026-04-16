@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct TrafficSummaryCard: View {
+    @Environment(\.localization) private var lang
     let traffic: TrafficStatistics?
 
     var body: some View {
@@ -11,14 +12,14 @@ struct TrafficSummaryCard: View {
                         statBlock(
                             icon: "arrow.down.circle.fill",
                             color: .green,
-                            label: "İndirme",
+                            label: lang.t(L.traffic.download),
                             value: TrafficFormatter.formatBytes(traffic.currentDownload)
                         )
                         Spacer()
                         statBlock(
                             icon: "arrow.up.circle.fill",
                             color: .blue,
-                            label: "Yükleme",
+                            label: lang.t(L.traffic.upload),
                             value: TrafficFormatter.formatBytes(traffic.currentUpload)
                         )
                     }
@@ -29,14 +30,14 @@ struct TrafficSummaryCard: View {
                         statBlock(
                             icon: "speedometer",
                             color: .green,
-                            label: "DL Hız",
+                            label: lang.t(L.traffic.dlSpeed),
                             value: TrafficFormatter.formatRate(traffic.currentDownloadRate)
                         )
                         Spacer()
                         statBlock(
                             icon: "speedometer",
                             color: .blue,
-                            label: "UL Hız",
+                            label: lang.t(L.traffic.ulSpeed),
                             value: TrafficFormatter.formatRate(traffic.currentUploadRate)
                         )
                     }
@@ -44,16 +45,16 @@ struct TrafficSummaryCard: View {
                     Divider()
 
                     infoRow(
-                        label: "Bağlantı Süresi",
+                        label: lang.t(L.traffic.connectTime),
                         value: TrafficFormatter.formatDuration(traffic.currentConnectTime)
                     )
                 }
             } else {
-                Text("Trafik verisi bekleniyor...")
+                Text(lang.t(L.dashboard.waitingTraffic))
                     .foregroundStyle(.secondary)
             }
         } label: {
-            Label("Trafik", systemImage: "chart.bar")
+            Label(lang.t(L.dashboard.trafficTitle), systemImage: "chart.bar")
         }
     }
 

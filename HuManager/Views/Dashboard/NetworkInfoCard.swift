@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct NetworkInfoCard: View {
+    @Environment(\.localization) private var lang
     let network: NetworkInfo?
     let monitoring: MonitoringStatus?
 
@@ -8,27 +9,27 @@ struct NetworkInfoCard: View {
         GroupBox {
             if let network {
                 VStack(alignment: .leading, spacing: 8) {
-                    infoRow(label: "Operatör", value: network.fullName)
-                    infoRow(label: "Ağ Türü", value: monitoring?.networkTypeDisplay ?? network.networkTypeDisplay)
-                    infoRow(label: "PLMN", value: network.numeric)
-                    infoRow(label: "Dolaşım", value: network.roaming ? "Evet" : "Hayır")
+                    infoRow(label: lang.t(L.status.operatorLabel), value: network.fullName)
+                    infoRow(label: lang.t(L.status.networkType), value: monitoring?.networkTypeDisplay ?? network.networkTypeDisplay)
+                    infoRow(label: lang.t(L.status.plmn), value: network.numeric)
+                    infoRow(label: lang.t(L.status.roaming), value: network.roaming ? lang.t(L.general.yes) : lang.t(L.general.no))
 
                     if let monitoring {
                         Divider()
-                        infoRow(label: "Bağlantı", value: monitoring.isConnected ? "Bağlı" : "Bağlı Değil")
-                        infoRow(label: "Sinyal", value: "\(monitoring.signalIcon)/5")
+                        infoRow(label: lang.t(L.status.connection), value: monitoring.isConnected ? lang.t(L.status.connectionConnected) : lang.t(L.status.connectionDisconnected))
+                        infoRow(label: lang.t(L.status.signalLabel), value: "\(monitoring.signalIcon)/5")
 
                         if !monitoring.batteryPercent.isEmpty {
-                            infoRow(label: "Pil", value: "%\(monitoring.batteryPercent)")
+                            infoRow(label: lang.t(L.status.battery), value: "%\(monitoring.batteryPercent)")
                         }
                     }
                 }
             } else {
-                Text("Ağ bilgisi bekleniyor...")
+                Text(lang.t(L.dashboard.waitingNetwork))
                     .foregroundStyle(.secondary)
             }
         } label: {
-            Label("Ağ Bilgisi", systemImage: "network")
+            Label(lang.t(L.dashboard.networkInfo), systemImage: "network")
         }
     }
 

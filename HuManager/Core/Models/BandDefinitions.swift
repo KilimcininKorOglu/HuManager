@@ -142,14 +142,15 @@ enum NetworkMode: String, CaseIterable, Identifiable, Sendable {
     var id: String { rawValue }
 
     var displayName: String {
+        let lang = LocalizationManager.shared
         switch self {
-        case .auto: "Otomatik"
-        case .only2G: "Sadece 2G"
-        case .only3G: "Sadece 3G"
-        case .only4G: "Sadece 4G"
-        case .auto3G2G: "3G/2G Otomatik"
-        case .auto4G3G: "4G/3G Otomatik"
-        case .auto4G2G: "4G/2G Otomatik"
+        case .auto: return lang.t(L.networkMode.auto)
+        case .only2G: return lang.t(L.networkMode.only2G)
+        case .only3G: return lang.t(L.networkMode.only3G)
+        case .only4G: return lang.t(L.networkMode.only4G)
+        case .auto3G2G: return lang.t(L.networkMode.auto3G2G)
+        case .auto4G3G: return lang.t(L.networkMode.auto4G3G)
+        case .auto4G2G: return lang.t(L.networkMode.auto4G2G)
         }
     }
 }

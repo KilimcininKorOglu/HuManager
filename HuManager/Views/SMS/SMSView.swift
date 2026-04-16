@@ -3,6 +3,7 @@ import SwiftUI
 struct SMSView: View {
     let client: HuaweiAPIClient
     @State private var vm = SMSViewModel()
+    @Environment(\.localization) private var lang
 
     var body: some View {
         HSplitView {
@@ -10,11 +11,11 @@ struct SMSView: View {
             VStack(spacing: 0) {
                 if let count = vm.smsCount {
                     HStack {
-                        Text("Gelen Kutusu")
+                        Text(lang.t(L.sms.inbox))
                             .font(.headline)
                         Spacer()
                         if count.totalUnread > 0 {
-                            Text("\(count.totalUnread) okunmamış")
+                            Text("\(count.totalUnread) \(lang.t(L.sms.unread))")
                                 .font(.caption)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 2)
@@ -34,7 +35,7 @@ struct SMSView: View {
                     Spacer()
                 } else if vm.messages.isEmpty {
                     Spacer()
-                    Text("Mesaj yok")
+                    Text(lang.t(L.sms.noMessages))
                         .foregroundStyle(.secondary)
                     Spacer()
                 } else {
@@ -42,7 +43,7 @@ struct SMSView: View {
                         SMSListRow(message: message)
                             .tag(message)
                             .contextMenu {
-                                Button("Sil", role: .destructive) {
+                                Button(lang.t(L.general.delete), role: .destructive) {
                                     Task { await vm.deleteSMS(client: client, message: message) }
                                 }
                             }
@@ -65,14 +66,14 @@ struct SMSView: View {
                 } else if let message = vm.selectedMessage {
                     SMSDetailView(message: message)
                 } else {
-                    Text("Bir mesaj seçin")
+                    Text(lang.t(L.sms.selectMessage))
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
             .frame(minWidth: 300)
         }
-        .navigationTitle("SMS")
+        .navigationTitle(lang.t(L.sms.title))
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button {
@@ -164,17 +165,18 @@ struct SMSComposeView: View {
     let isSending: Bool
     let onSend: () -> Void
     let onCancel: () -> Void
+    @Environment(\.localization) private var lang
 
     var body: some View {
         VStack(spacing: 16) {
             HStack {
-                Text("Yeni SMS")
+                Text(lang.t(L.sms.newSMS))
                     .font(.title3.bold())
                 Spacer()
-                Button("İptal") { onCancel() }
+                Button(lang.t(L.general.cancel)) { onCancel() }
             }
 
-            TextField("Telefon Numarası", text: $phone)
+            TextField(lang.t(L.sms.phoneNumber), text: $phone)
                 .textFieldStyle(.roundedBorder)
 
             TextEditor(text: $content)
@@ -183,7 +185,7 @@ struct SMSComposeView: View {
                 .border(Color.secondary.opacity(0.3))
 
             HStack {
-                Text("\(content.count) karakter")
+                Text("\(content.count) \(lang.t(L.sms.characters))")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -193,7 +195,7 @@ struct SMSComposeView: View {
                             ProgressView()
                                 .controlSize(.small)
                         }
-                        Text("Gönder")
+                        Text(lang.t(L.general.send))
                     }
                 }
                 .buttonStyle(.borderedProminent)

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SignalSummaryCard: View {
+    @Environment(\.localization) private var lang
     let signal: SignalInfo?
 
     var body: some View {
@@ -34,11 +35,11 @@ struct SignalSummaryCard: View {
                     .font(.caption)
                 }
             } else {
-                Text("Sinyal verisi bekleniyor...")
+                Text(lang.t(L.dashboard.waitingSignal))
                     .foregroundStyle(.secondary)
             }
         } label: {
-            Label("Sinyal Kalitesi", systemImage: "antenna.radiowaves.left.and.right")
+            Label(lang.t(L.dashboard.signalQuality), systemImage: "antenna.radiowaves.left.and.right")
         }
     }
 

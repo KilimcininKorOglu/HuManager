@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct DeviceStatusCard: View {
+    @Environment(\.localization) private var lang
     let device: DeviceInfo?
     let monitoring: MonitoringStatus?
 
@@ -8,11 +9,11 @@ struct DeviceStatusCard: View {
         GroupBox {
             if let device {
                 VStack(alignment: .leading, spacing: 8) {
-                    infoRow(label: "Model", value: device.deviceName)
+                    infoRow(label: lang.t(L.device.model), value: device.deviceName)
                     infoRow(label: "IMEI", value: device.imei)
-                    infoRow(label: "Seri No", value: device.serialNumber)
-                    infoRow(label: "Donanım", value: device.hardwareVersion)
-                    infoRow(label: "Yazılım", value: device.softwareVersion)
+                    infoRow(label: lang.t(L.device.serialNo), value: device.serialNumber)
+                    infoRow(label: lang.t(L.device.hardware), value: device.hardwareVersion)
+                    infoRow(label: lang.t(L.device.firmwareLabel), value: device.softwareVersion)
 
                     if !device.wanIPAddress.isEmpty {
                         Divider()
@@ -24,11 +25,11 @@ struct DeviceStatusCard: View {
                     }
                 }
             } else {
-                Text("Cihaz bilgisi bekleniyor...")
+                Text(lang.t(L.dashboard.waitingDevice))
                     .foregroundStyle(.secondary)
             }
         } label: {
-            Label("Cihaz", systemImage: "cpu")
+            Label(lang.t(L.dashboard.deviceTitle), systemImage: "cpu")
         }
     }
 

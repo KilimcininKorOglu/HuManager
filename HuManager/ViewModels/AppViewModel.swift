@@ -9,14 +9,14 @@ enum ConnectionState: Sendable {
 }
 
 enum SidebarTab: String, CaseIterable, Identifiable {
-    case dashboard = "Gösterge Paneli"
-    case signal = "Sinyal"
-    case bands = "Band Kilidi"
-    case sms = "SMS"
-    case network = "Ağ"
-    case traffic = "Trafik"
-    case wifi = "WiFi"
-    case device = "Cihaz"
+    case dashboard = "dashboard"
+    case signal = "signal"
+    case bands = "bands"
+    case sms = "sms"
+    case network = "network"
+    case traffic = "traffic"
+    case wifi = "wifi"
+    case device = "device"
 
     var id: String { rawValue }
 
@@ -30,6 +30,19 @@ enum SidebarTab: String, CaseIterable, Identifiable {
         case .traffic: "chart.bar"
         case .wifi: "wifi"
         case .device: "cpu"
+        }
+    }
+
+    func displayName(_ lang: LocalizationManager) -> String {
+        switch self {
+        case .dashboard: lang.t(L.sidebar.dashboard)
+        case .signal: lang.t(L.sidebar.signal)
+        case .bands: lang.t(L.sidebar.bands)
+        case .sms: lang.t(L.sidebar.sms)
+        case .network: lang.t(L.sidebar.network)
+        case .traffic: lang.t(L.sidebar.traffic)
+        case .wifi: lang.t(L.sidebar.wifi)
+        case .device: lang.t(L.sidebar.device)
         }
     }
 }

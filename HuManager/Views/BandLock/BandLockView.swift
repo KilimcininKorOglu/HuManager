@@ -3,6 +3,7 @@ import SwiftUI
 struct BandLockView: View {
     let client: HuaweiAPIClient
     @State private var vm = BandLockViewModel()
+    @Environment(\.localization) private var lang
 
     var body: some View {
         ScrollView {
@@ -11,7 +12,7 @@ struct BandLockView: View {
                 if !vm.activeBand.isEmpty {
                     GroupBox {
                         HStack {
-                            Label("Aktif Band", systemImage: "antenna.radiowaves.left.and.right")
+                            Label(lang.t(L.band.activeBand), systemImage: "antenna.radiowaves.left.and.right")
                             Spacer()
                             Text("B\(vm.activeBand)")
                                 .font(.title3.bold())
@@ -21,8 +22,8 @@ struct BandLockView: View {
                 }
 
                 // Network mode picker
-                GroupBox("Ağ Modu") {
-                    Picker("Ağ Modu", selection: $vm.selectedNetworkMode) {
+                GroupBox(lang.t(L.band.networkMode)) {
+                    Picker(lang.t(L.band.networkMode), selection: $vm.selectedNetworkMode) {
                         ForEach(NetworkMode.allCases) { mode in
                             Text(mode.displayName).tag(mode)
                         }
@@ -34,11 +35,11 @@ struct BandLockView: View {
                 GroupBox {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
-                            Text("LTE Bandları")
+                            Text(lang.t(L.band.lteBands))
                                 .font(.headline)
                             Spacer()
-                            Button("Tümü") { vm.selectAllLTE() }
-                            Button("Hiçbiri") { vm.deselectAllLTE() }
+                            Button(lang.t(L.band.selectAll)) { vm.selectAllLTE() }
+                            Button(lang.t(L.band.selectNone)) { vm.deselectAllLTE() }
                         }
 
                         LazyVGrid(columns: [
@@ -67,7 +68,7 @@ struct BandLockView: View {
                 // NR Band selection
                 GroupBox {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("5G NR Bandları")
+                        Text(lang.t(L.band.nrBands))
                             .font(.headline)
 
                         LazyVGrid(columns: [
@@ -95,14 +96,14 @@ struct BandLockView: View {
 
                 // Action buttons
                 HStack(spacing: 12) {
-                    Button("Otomatiğe Sıfırla") {
+                    Button(lang.t(L.band.resetAuto)) {
                         Task { await vm.resetToAuto(client: client) }
                     }
                     .buttonStyle(.bordered)
 
                     Spacer()
 
-                    Button("Uygula") {
+                    Button(lang.t(L.general.apply)) {
                         Task { await vm.applyBandLock(client: client) }
                     }
                     .buttonStyle(.borderedProminent)
@@ -117,7 +118,7 @@ struct BandLockView: View {
             }
             .padding()
         }
-        .navigationTitle("Band Kilidi")
+        .navigationTitle(lang.t(L.band.title))
         .overlay {
             if vm.isLoading {
                 ProgressView()

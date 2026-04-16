@@ -6,6 +6,7 @@ struct DeviceInfoView: View {
     @State private var monitoring: MonitoringStatus?
     @State private var isLoading = false
     @State private var showRebootConfirm = false
+    @Environment(\.localization) private var lang
 
     private let deviceService = DeviceService()
 
@@ -13,28 +14,28 @@ struct DeviceInfoView: View {
         ScrollView {
             VStack(spacing: 16) {
                 if let device {
-                    GroupBox("Cihaz Bilgisi") {
+                    GroupBox(lang.t(L.device.deviceInfo)) {
                         Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 8) {
-                            infoRow("Model", device.deviceName)
+                            infoRow(lang.t(L.device.model), device.deviceName)
                             infoRow("IMEI", device.imei)
-                            infoRow("Seri No", device.serialNumber)
+                            infoRow(lang.t(L.device.serialNo), device.serialNumber)
                             infoRow("IMSI", device.imsi)
                             infoRow("ICCID", device.iccid)
                             infoRow("MSISDN", device.msisdn)
                         }
                     }
 
-                    GroupBox("Yazılım") {
+                    GroupBox(lang.t(L.device.software)) {
                         Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 8) {
-                            infoRow("Donanım", device.hardwareVersion)
-                            infoRow("Yazılım", device.softwareVersion)
+                            infoRow(lang.t(L.device.hardware), device.hardwareVersion)
+                            infoRow(lang.t(L.device.firmwareLabel), device.softwareVersion)
                             infoRow("WebUI", device.webUIVersion)
                             infoRow("MAC", device.macAddress)
                         }
                     }
 
                     if !device.wanIPAddress.isEmpty {
-                        GroupBox("Ağ") {
+                        GroupBox(lang.t(L.device.networkSection)) {
                             Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 8) {
                                 infoRow("WAN IP", device.wanIPAddress)
                                 if let monitoring {
@@ -47,12 +48,12 @@ struct DeviceInfoView: View {
                 }
 
                 // Control buttons
-                GroupBox("Cihaz Kontrolü") {
+                GroupBox(lang.t(L.device.control)) {
                     HStack {
                         Button(role: .destructive) {
                             showRebootConfirm = true
                         } label: {
-                            Label("Yeniden Başlat", systemImage: "arrow.clockwise")
+                            Label(lang.t(L.device.reboot), systemImage: "arrow.clockwise")
                         }
                         .buttonStyle(.bordered)
                         Spacer()
@@ -61,7 +62,7 @@ struct DeviceInfoView: View {
             }
             .padding()
         }
-        .navigationTitle("Cihaz")
+        .navigationTitle(lang.t(L.device.title))
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button {
@@ -75,15 +76,15 @@ struct DeviceInfoView: View {
         .task {
             await loadData()
         }
-        .alert("Cihazı Yeniden Başlat", isPresented: $showRebootConfirm) {
-            Button("İptal", role: .cancel) {}
-            Button("Yeniden Başlat", role: .destructive) {
+        .alert(lang.t(L.device.rebootConfirmTitle), isPresented: $showRebootConfirm) {
+            Button(lang.t(L.general.cancel), role: .cancel) {}
+            Button(lang.t(L.device.reboot), role: .destructive) {
                 Task {
                     try? await deviceService.reboot(client: client)
                 }
             }
         } message: {
-            Text("Modem yeniden başlatılacak. Bağlantı kesilecektir.")
+            Text(lang.t(L.device.rebootConfirmMessage))
         }
     }
 

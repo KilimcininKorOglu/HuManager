@@ -5,6 +5,7 @@ struct WiFiSettingsView: View {
     @State private var settings: WiFiSettings?
     @State private var devices: [ConnectedDevice] = []
     @State private var isLoading = false
+    @Environment(\.localization) private var lang
 
     private let wifiService = WiFiService()
 
@@ -12,35 +13,35 @@ struct WiFiSettingsView: View {
         ScrollView {
             VStack(spacing: 16) {
                 if let settings {
-                    GroupBox("WiFi Ayarları") {
+                    GroupBox(lang.t(L.wifi.settings)) {
                         Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 8) {
-                            infoRow("SSID", settings.ssid)
-                            infoRow("Durum", settings.wifiEnable ? "Açık" : "Kapalı")
-                            infoRow("Kanal", settings.channel == "0" ? "Otomatik" : settings.channel)
-                            infoRow("Güvenlik", settings.securityMode)
-                            infoRow("Şifre", settings.wpaKey.isEmpty ? settings.wepKey : settings.wpaKey)
+                            infoRow(lang.t(L.wifi.ssid), settings.ssid)
+                            infoRow(lang.t(L.wifi.status), settings.wifiEnable ? lang.t(L.wifi.enabled) : lang.t(L.wifi.disabled))
+                            infoRow(lang.t(L.wifi.channel), settings.channel == "0" ? lang.t(L.wifi.automatic) : settings.channel)
+                            infoRow(lang.t(L.wifi.security), settings.securityMode)
+                            infoRow(lang.t(L.wifi.wifiPassword), settings.wpaKey.isEmpty ? settings.wepKey : settings.wpaKey)
                             if settings.maxUsers > 0 {
-                                infoRow("Maks Kullanıcı", "\(settings.maxUsers)")
+                                infoRow(lang.t(L.wifi.maxUsers), "\(settings.maxUsers)")
                             }
                         }
                     }
                 }
 
-                GroupBox("Bağlı Cihazlar (\(devices.count))") {
+                GroupBox("\(lang.t(L.wifi.connectedDevices)) (\(devices.count))") {
                     if devices.isEmpty {
-                        Text("Bağlı cihaz yok")
+                        Text(lang.t(L.wifi.noDevices))
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity)
                     } else {
                         Table(devices) {
-                            TableColumn("Cihaz Adı") { device in
+                            TableColumn(lang.t(L.wifi.deviceName)) { device in
                                 Text(device.hostName.isEmpty ? "-" : device.hostName)
                             }
-                            TableColumn("IP Adresi") { device in
+                            TableColumn(lang.t(L.wifi.ipAddress)) { device in
                                 Text(device.ipAddress)
                                     .monospacedDigit()
                             }
-                            TableColumn("MAC Adresi") { device in
+                            TableColumn(lang.t(L.wifi.macAddress)) { device in
                                 Text(device.macAddress)
                                     .font(.system(.body, design: .monospaced))
                             }
@@ -51,7 +52,7 @@ struct WiFiSettingsView: View {
             }
             .padding()
         }
-        .navigationTitle("WiFi")
+        .navigationTitle(lang.t(L.wifi.title))
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button {

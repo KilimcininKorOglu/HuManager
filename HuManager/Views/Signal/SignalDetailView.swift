@@ -4,13 +4,14 @@ import Charts
 struct SignalDetailView: View {
     let client: HuaweiAPIClient
     @State private var vm = SignalViewModel()
+    @Environment(\.localization) private var lang
 
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
                 // Signal metrics table
                 if let signal = vm.currentSignal {
-                    GroupBox("LTE Sinyal Metrikleri") {
+                    GroupBox(lang.t(L.signal.lteMetrics)) {
                         Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 8) {
                             metricRow("RSRP", signal.rsrp, signal.rsrpValue.map(SignalQualityHelper.rsrpQuality))
                             metricRow("RSRQ", signal.rsrq, signal.rsrqValue.map(SignalQualityHelper.rsrqQuality))
@@ -28,7 +29,7 @@ struct SignalDetailView: View {
                     }
 
                     if signal.has5G {
-                        GroupBox("5G NR Sinyal Metrikleri") {
+                        GroupBox(lang.t(L.signal.nrMetrics)) {
                             Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 8) {
                                 metricRow("NR RSRP", signal.nrRSRP, signal.nrRSRPValue.map(SignalQualityHelper.rsrpQuality))
                                 metricRow("NR RSRQ", signal.nrRSRQ, nil)
@@ -45,7 +46,7 @@ struct SignalDetailView: View {
 
                 // RSRP Chart
                 if vm.signalHistory.count > 1 {
-                    GroupBox("RSRP Geçmişi") {
+                    GroupBox(lang.t(L.signal.rsrpHistory)) {
                         Chart(vm.signalHistory) { entry in
                             LineMark(
                                 x: .value("Zaman", entry.timestamp),
@@ -58,7 +59,7 @@ struct SignalDetailView: View {
                         .frame(height: 200)
                     }
 
-                    GroupBox("SINR Geçmişi") {
+                    GroupBox(lang.t(L.signal.sinrHistory)) {
                         Chart(vm.signalHistory) { entry in
                             LineMark(
                                 x: .value("Zaman", entry.timestamp),
@@ -73,14 +74,14 @@ struct SignalDetailView: View {
                 }
 
                 if vm.currentSignal == nil && !vm.isPolling {
-                    Text("Sinyal verisi bekleniyor...")
+                    Text(lang.t(L.signal.waitingSignal))
                         .foregroundStyle(.secondary)
                         .padding(.top, 60)
                 }
             }
             .padding()
         }
-        .navigationTitle("Sinyal İzleme")
+        .navigationTitle(lang.t(L.signal.title))
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button {
@@ -91,7 +92,7 @@ struct SignalDetailView: View {
                     }
                 } label: {
                     Image(systemName: vm.isPolling ? "pause.circle.fill" : "play.circle.fill")
-                    Text(vm.isPolling ? "Durdur" : "Başlat")
+                    Text(vm.isPolling ? lang.t(L.general.stop) : lang.t(L.general.start))
                 }
             }
 

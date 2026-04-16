@@ -5,6 +5,7 @@ struct StatusBarView: View {
     let webUIVersion: WebUIVersion?
     let modemIP: String
     let onDisconnect: () -> Void
+    @Environment(\.localization) private var lang
 
     var body: some View {
         HStack(spacing: 8) {
@@ -26,7 +27,7 @@ struct StatusBarView: View {
             }
 
             if case .connected = connectionState {
-                Button("Bağlantıyı Kes") {
+                Button(lang.t(L.general.disconnect)) {
                     onDisconnect()
                 }
                 .buttonStyle(.bordered)
@@ -47,9 +48,9 @@ struct StatusBarView: View {
     private var statusText: String {
         switch connectionState {
         case .connected: modemIP
-        case .connecting: "Bağlanıyor..."
-        case .disconnected: "Bağlı Değil"
-        case .error: "Hata"
+        case .connecting: lang.t(L.general.connecting)
+        case .disconnected: lang.t(L.general.disconnected)
+        case .error: lang.t(L.general.error)
         }
     }
 }

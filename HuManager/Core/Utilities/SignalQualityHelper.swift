@@ -18,12 +18,13 @@ enum SignalQuality: Sendable {
     }
 
     var label: String {
+        let lang = LocalizationManager.shared
         switch self {
-        case .excellent: "Mükemmel"
-        case .good: "İyi"
-        case .fair: "Orta"
-        case .poor: "Zayıf"
-        case .noSignal: "Sinyal Yok"
+        case .excellent: return lang.t(L.quality.excellent)
+        case .good: return lang.t(L.quality.good)
+        case .fair: return lang.t(L.quality.fair)
+        case .poor: return lang.t(L.quality.poor)
+        case .noSignal: return lang.t(L.quality.noSignal)
         }
     }
 }
