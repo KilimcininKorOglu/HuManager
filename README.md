@@ -102,4 +102,4 @@ Tests cover XML parsing, crypto helpers (SHA256, HMAC, PBKDF2, XOR), band mask c
 
 ## License
 
-Private project. All rights reserved.
+[MIT](LICENSE)
