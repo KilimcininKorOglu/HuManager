@@ -14,6 +14,8 @@ struct NetworkInfo: Sendable {
         case "2": "3G (WCDMA)"
         case "7": "4G (LTE)"
         case "11": "5G (NR)"
+        // H153-381 firmware 4.0.0.5 reports 12 while registered on 5G SA.
+        case "12": "5G (NR)"
         default: rat.isEmpty ? LocalizationManager.shared.t(L.general.unknown) : rat
         }
     }

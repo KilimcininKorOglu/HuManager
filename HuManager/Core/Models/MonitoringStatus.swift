@@ -31,6 +31,8 @@ struct MonitoringStatus: Sendable {
         case 8: "TD-SCDMA"
         case 9: "HSPA+"
         case 19: "LTE"
+        // H153-381 firmware 4.0.0.5 reports 20 while registered on 5G SA.
+        case 20: "5G SA"
         case 41: "UMTS"
         case 44: "HSPA+"
         case 45: "HSPA+ DC"
