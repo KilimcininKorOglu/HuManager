@@ -6,6 +6,7 @@ struct MenuBarPanel: View {
     @State private var signalInfo: SignalInfo?
     @State private var monitoringStatus: MonitoringStatus?
     @State private var networkInfo: NetworkInfo?
+    @State private var fetchFailed = false
 
     private let deviceService = DeviceService()
 
@@ -35,6 +36,14 @@ struct MenuBarPanel: View {
                 .font(.caption.bold())
 
             Spacer()
+
+            // The panel keeps showing the last good reading, so flag staleness.
+            if fetchFailed, appVM.isConnected {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.yellow)
+                    .help(lang.t(L.errors.timeout))
+            }
 
             if let status = monitoringStatus, appVM.isConnected {
                 Text(status.networkTypeDisplay)
@@ -149,8 +158,9 @@ struct MenuBarPanel: View {
             signalInfo = try await sig
             monitoringStatus = try await mon
             networkInfo = try await net
+            fetchFailed = false
         } catch {
-            // Silent failure — panel shows stale or no data
+            fetchFailed = true
         }
     }
 }

@@ -6,6 +6,7 @@ struct DeviceInfoView: View {
     @State private var monitoring: MonitoringStatus?
     @State private var isLoading = false
     @State private var showRebootConfirm = false
+    @State private var errorMessage: String?
     @Environment(\.localization) private var lang
 
     private let deviceService = DeviceService()
@@ -13,6 +14,12 @@ struct DeviceInfoView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
+                if let errorMessage {
+                    ErrorBanner(message: errorMessage) {
+                        self.errorMessage = nil
+                    }
+                }
+
                 if let device {
                     GroupBox(lang.t(L.device.deviceInfo)) {
                         Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 8) {
@@ -79,24 +86,30 @@ struct DeviceInfoView: View {
         .alert(lang.t(L.device.rebootConfirmTitle), isPresented: $showRebootConfirm) {
             Button(lang.t(L.general.cancel), role: .cancel) {}
             Button(lang.t(L.device.reboot), role: .destructive) {
-                Task {
-                    try? await deviceService.reboot(client: client)
-                }
+                Task { await reboot() }
             }
         } message: {
             Text(lang.t(L.device.rebootConfirmMessage))
         }
     }
 
+    private func reboot() async {
+        do {
+            try await deviceService.reboot(client: client)
+            errorMessage = nil
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
     private func loadData() async {
         isLoading = true
         do {
-            async let d = deviceService.getDeviceInfo(client: client)
-            async let m = deviceService.getMonitoringStatus(client: client)
-            device = try await d
-            monitoring = try await m
+            device = try await deviceService.getDeviceInfo(client: client)
+            monitoring = try await deviceService.getMonitoringStatus(client: client)
+            errorMessage = nil
         } catch {
-            // Silently handle
+            errorMessage = error.localizedDescription
         }
         isLoading = false
     }
