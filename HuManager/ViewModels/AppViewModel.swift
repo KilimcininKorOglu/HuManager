@@ -76,8 +76,11 @@ final class AppViewModel {
         if saved {
             modemIP = defaults.string(forKey: Self.kModemIP) ?? "192.168.8.1"
             username = defaults.string(forKey: Self.kUsername) ?? "admin"
-            password = defaults.string(forKey: Self.kPassword) ?? ""
+            password = KeychainStore.read(account: Self.kPassword) ?? ""
         }
+
+        // Discard any plaintext password written by an earlier build.
+        defaults.removeObject(forKey: Self.kPassword)
     }
 
     var isConnected: Bool {
@@ -116,11 +119,11 @@ final class AppViewModel {
         if rememberMe {
             defaults.set(modemIP, forKey: Self.kModemIP)
             defaults.set(username, forKey: Self.kUsername)
-            defaults.set(password, forKey: Self.kPassword)
+            KeychainStore.save(password, account: Self.kPassword)
         } else {
             defaults.removeObject(forKey: Self.kModemIP)
             defaults.removeObject(forKey: Self.kUsername)
-            defaults.removeObject(forKey: Self.kPassword)
+            KeychainStore.delete(account: Self.kPassword)
         }
     }
 
