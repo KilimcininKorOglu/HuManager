@@ -37,6 +37,8 @@ enum Endpoints {
 
     // MARK: - WiFi
     static let wifiSettings = "/api/wlan/multi-basic-settings"
+    static let wifiBasicSettings = "/api/wlan/basic-settings"
+    static let wifiSecuritySettings = "/api/wlan/security-settings"
     static let connectedDevices = "/api/wlan/host-list"
     static let macFilter = "/api/wlan/multi-macfilter-settings"
     static let wifiSwitch = "/api/wlan/status-switch-settings"

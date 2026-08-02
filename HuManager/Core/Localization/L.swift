@@ -121,6 +121,11 @@ enum L {
         static let deviceName = "wifi.deviceName"
         static let ipAddress = "wifi.ipAddress"
         static let macAddress = "wifi.macAddress"
+        static let edit = "wifi.edit"
+        static let save = "wifi.save"
+        static let hideSsid = "wifi.hideSsid"
+        static let restartWarning = "wifi.restartWarning"
+        static let saved = "wifi.saved"
     }
 
     enum device {

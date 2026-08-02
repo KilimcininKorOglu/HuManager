@@ -24,6 +24,27 @@ struct WiFiSettings: Sendable {
     }
 }
 
+// Values the modem accepts in the WifiAuthmode field.
+enum WiFiAuthMode: String, CaseIterable, Identifiable, Sendable {
+    case open = "OPEN"
+    case wpaPSK = "WPA-PSK"
+    case wpa2PSK = "WPA2-PSK"
+    case wpaWpa2PSK = "WPA/WPA2-PSK"
+
+    var id: String { rawValue }
+
+    var requiresPassword: Bool {
+        self != .open
+    }
+}
+
+// Values the modem accepts in the WifiWpaencryptionmodes field.
+enum WiFiEncryptionMode: String, Sendable {
+    case aes = "AES"
+    case tkip = "TKIP"
+    case mixed = "MIX"
+}
+
 struct ConnectedDevice: Identifiable, Sendable {
     let macAddress: String
     let ipAddress: String
