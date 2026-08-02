@@ -12,6 +12,8 @@ actor HeartbeatService {
         stop()
         isRunning = true
 
+        let logger = self.logger
+
         heartbeatTask = Task { [weak self] in
             while !Task.isCancelled {
                 let sleepInterval = await self?.interval ?? 30.0
@@ -22,7 +24,7 @@ actor HeartbeatService {
                 do {
                     _ = try await client.get(Endpoints.stateLogin)
                 } catch {
-                    await self?.logger.warning("Heartbeat error: \(error.localizedDescription)")
+                    logger.warning("Heartbeat error: \(error.localizedDescription)")
                 }
             }
 

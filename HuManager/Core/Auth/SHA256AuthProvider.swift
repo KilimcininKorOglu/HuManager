@@ -29,14 +29,14 @@ final class SHA256AuthProvider: Sendable {
         ])
 
         // Step 4: POST to /api/user/login
-        let (data, response) = try await client.postForLogin(
+        let (data, _) = try await client.postForLogin(
             Endpoints.login,
             body: body,
             token: token
         )
 
-        // Step 5: Parse response
-        let parsed = try XMLResponseParser.parseResponse(data: data)
+        // Step 5: Parse to surface an error response as a thrown error
+        _ = try XMLResponseParser.parseResponse(data: data)
         logger.info("SHA256 login successful")
 
         await client.session.setLoggedIn(true)
