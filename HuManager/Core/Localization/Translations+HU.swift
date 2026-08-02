@@ -136,6 +136,11 @@ extension Translations {
         "status.operator": "Szolgáltató",
         "status.networkType": "Hálózat típusa",
         "status.plmn": "PLMN",
+        "network.primaryDns": "Elsődleges DNS",
+        "network.secondaryDns": "Másodlagos DNS",
+        "network.simStatus": "SIM állapota",
+        "network.serviceDomain": "Szolgáltatási tartomány",
+        "network.registration": "Regisztráció",
 
         // Quality
         "quality.excellent": "Kiváló",

@@ -136,6 +136,11 @@ extension Translations {
         "status.operator": "Operator",
         "status.networkType": "Tip rețea",
         "status.plmn": "PLMN",
+        "network.primaryDns": "DNS primar",
+        "network.secondaryDns": "DNS secundar",
+        "network.simStatus": "Stare SIM",
+        "network.serviceDomain": "Domeniu de serviciu",
+        "network.registration": "Înregistrare",
 
         // Quality
         "quality.excellent": "Excelent",

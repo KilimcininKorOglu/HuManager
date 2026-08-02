@@ -51,7 +51,7 @@ struct ContentView: View {
             case .sms:
                 SMSView(client: client)
             case .network:
-                BandLockView(client: client)
+                NetworkInfoView(client: client)
             case .traffic:
                 TrafficView(client: client)
             case .wifi:

@@ -136,6 +136,11 @@ extension Translations {
         "status.operator": "Πάροχος",
         "status.networkType": "Τύπος δικτύου",
         "status.plmn": "PLMN",
+        "network.primaryDns": "Πρωτεύον DNS",
+        "network.secondaryDns": "Δευτερεύον DNS",
+        "network.simStatus": "Κατάσταση SIM",
+        "network.serviceDomain": "Τομέας υπηρεσίας",
+        "network.registration": "Εγγραφή",
 
         // Quality
         "quality.excellent": "Άριστο",

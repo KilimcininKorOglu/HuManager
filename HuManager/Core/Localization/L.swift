@@ -157,6 +157,14 @@ enum L {
         static let noSignal = "quality.noSignal"
     }
 
+    enum network {
+        static let primaryDns = "network.primaryDns"
+        static let secondaryDns = "network.secondaryDns"
+        static let simStatus = "network.simStatus"
+        static let serviceDomain = "network.serviceDomain"
+        static let registration = "network.registration"
+    }
+
     enum networkMode {
         static let auto = "networkMode.auto"
         static let only2G = "networkMode.only2G"

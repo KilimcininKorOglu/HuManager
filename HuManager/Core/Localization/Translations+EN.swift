@@ -136,6 +136,11 @@ extension Translations {
         "status.operator": "Operator",
         "status.networkType": "Network Type",
         "status.plmn": "PLMN",
+        "network.primaryDns": "Primary DNS",
+        "network.secondaryDns": "Secondary DNS",
+        "network.simStatus": "SIM Status",
+        "network.serviceDomain": "Service Domain",
+        "network.registration": "Registration",
 
         // Quality
         "quality.excellent": "Excellent",

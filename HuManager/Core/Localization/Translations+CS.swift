@@ -136,6 +136,11 @@ extension Translations {
         "status.operator": "Operátor",
         "status.networkType": "Typ sítě",
         "status.plmn": "PLMN",
+        "network.primaryDns": "Primární DNS",
+        "network.secondaryDns": "Sekundární DNS",
+        "network.simStatus": "Stav SIM",
+        "network.serviceDomain": "Doména služby",
+        "network.registration": "Registrace",
 
         // Quality
         "quality.excellent": "Vynikající",

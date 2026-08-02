@@ -136,6 +136,11 @@ extension Translations {
         "status.operator": "Operatör",
         "status.networkType": "Ağ Türü",
         "status.plmn": "PLMN",
+        "network.primaryDns": "Birincil DNS",
+        "network.secondaryDns": "İkincil DNS",
+        "network.simStatus": "SIM Durumu",
+        "network.serviceDomain": "Servis Alanı",
+        "network.registration": "Kayıt Durumu",
 
         // Quality
         "quality.excellent": "Mükemmel",
