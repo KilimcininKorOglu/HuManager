@@ -14,7 +14,7 @@ struct NetworkInfo: Sendable {
         case "2": "3G (WCDMA)"
         case "7": "4G (LTE)"
         case "11": "5G (NR)"
-        default: rat.isEmpty ? "Bilinmiyor" : rat
+        default: rat.isEmpty ? LocalizationManager.shared.t(L.general.unknown) : rat
         }
     }
 

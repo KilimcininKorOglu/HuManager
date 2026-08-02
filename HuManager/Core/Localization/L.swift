@@ -13,6 +13,7 @@ enum L {
         static let disconnected = "general.disconnected"
         static let error = "general.error"
         static let unknownError = "general.unknownError"
+        static let unknown = "general.unknown"
         static let ok = "general.ok"
         static let cancel = "general.cancel"
         static let apply = "general.apply"
@@ -147,6 +148,8 @@ enum L {
         static let operatorLabel = "status.operator"
         static let networkType = "status.networkType"
         static let plmn = "status.plmn"
+        static let noService = "status.noService"
+        static let networkTypeCode = "status.networkTypeCode"
     }
 
     enum quality {

@@ -20,7 +20,7 @@ struct MonitoringStatus: Sendable {
 
     var networkTypeDisplay: String {
         switch currentNetworkType {
-        case 0: "Bağlantı yok"
+        case 0: LocalizationManager.shared.t(L.status.noService)
         case 1: "GSM"
         case 2: "GPRS"
         case 3: "EDGE"
@@ -39,7 +39,7 @@ struct MonitoringStatus: Sendable {
         case 65: "LTE-A Pro"
         case 101: "5G NSA"
         case 102: "5G SA"
-        default: "Tür: \(currentNetworkType)"
+        default: LocalizationManager.shared.t(L.status.networkTypeCode, "\(currentNetworkType)")
         }
     }
 

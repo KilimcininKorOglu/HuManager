@@ -30,38 +30,3 @@ struct ErrorBanner: View {
     }
 }
 
-struct ConfirmationDialog: ViewModifier {
-    let title: String
-    let message: String
-    let confirmLabel: String
-    @Binding var isPresented: Bool
-    let onConfirm: () -> Void
-
-    func body(content: Content) -> some View {
-        content
-            .alert(title, isPresented: $isPresented) {
-                Button("İptal", role: .cancel) {}
-                Button(confirmLabel, role: .destructive) { onConfirm() }
-            } message: {
-                Text(message)
-            }
-    }
-}
-
-extension View {
-    func destructiveConfirmation(
-        _ title: String,
-        message: String,
-        confirmLabel: String = "Onayla",
-        isPresented: Binding<Bool>,
-        onConfirm: @escaping () -> Void
-    ) -> some View {
-        modifier(ConfirmationDialog(
-            title: title,
-            message: message,
-            confirmLabel: confirmLabel,
-            isPresented: isPresented,
-            onConfirm: onConfirm
-        ))
-    }
-}
