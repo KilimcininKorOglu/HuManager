@@ -44,7 +44,7 @@ enum CryptoHelpers {
         salt: Data,
         iterations: Int,
         keyLength: Int = 32
-    ) -> Data {
+    ) throws -> Data {
         var derivedKey = Data(count: keyLength)
 
         let result = derivedKey.withUnsafeMutableBytes { derivedKeyBytes in
@@ -64,7 +64,9 @@ enum CryptoHelpers {
         }
 
         guard result == kCCSuccess else {
-            fatalError("PBKDF2 türetme hatası: \(result)")
+            throw HuaweiAPIError.authenticationFailed(
+                reason: "PBKDF2 key derivation failed with status \(result)"
+            )
         }
 
         return derivedKey
@@ -72,8 +74,13 @@ enum CryptoHelpers {
 
     // MARK: - XOR
 
-    static func xorBytes(_ a: Data, _ b: Data) -> Data {
-        precondition(a.count == b.count, "XOR: veri boyutları eşit olmalı")
+    static func xorBytes(_ a: Data, _ b: Data) throws -> Data {
+        guard a.count == b.count else {
+            throw HuaweiAPIError.authenticationFailed(
+                reason: "XOR operand length mismatch: \(a.count) vs \(b.count)"
+            )
+        }
+
         var result = Data(count: a.count)
         for i in 0..<a.count {
             result[i] = a[i] ^ b[i]

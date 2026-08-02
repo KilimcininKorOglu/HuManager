@@ -92,7 +92,7 @@ final class SCRAMAuthProvider: Sendable {
         let msg = "\(clientNonce),\(serverNonce),\(serverNonce)"
 
         // PBKDF2-HMAC-SHA256(password, salt, iterations)
-        let saltedPassword = CryptoHelpers.pbkdf2SHA256(
+        let saltedPassword = try CryptoHelpers.pbkdf2SHA256(
             password: password,
             salt: saltData,
             iterations: iterations
@@ -118,7 +118,7 @@ final class SCRAMAuthProvider: Sendable {
         )
 
         // clientProof = XOR(clientKey, signature)
-        let clientProof = CryptoHelpers.xorBytes(clientKey, signature)
+        let clientProof = try CryptoHelpers.xorBytes(clientKey, signature)
 
         return clientProof.hexString
     }

@@ -38,11 +38,23 @@ final class HuManagerTests: XCTestCase {
         XCTAssertEqual(result, "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")
     }
 
-    func testCryptoXOR() {
+    func testCryptoXOR() throws {
         let a = Data([0xFF, 0x00, 0xAA])
         let b = Data([0x0F, 0xF0, 0x55])
-        let result = CryptoHelpers.xorBytes(a, b)
+        let result = try CryptoHelpers.xorBytes(a, b)
         XCTAssertEqual(result, Data([0xF0, 0xF0, 0xFF]))
+    }
+
+    func testCryptoXORLengthMismatchThrows() {
+        let a = Data([0xFF, 0x00])
+        let b = Data([0x0F])
+
+        XCTAssertThrowsError(try CryptoHelpers.xorBytes(a, b)) { error in
+            guard case HuaweiAPIError.authenticationFailed = error else {
+                XCTFail("Expected authenticationFailed, got \(error)")
+                return
+            }
+        }
     }
 
     func testDataHexConversion() {
