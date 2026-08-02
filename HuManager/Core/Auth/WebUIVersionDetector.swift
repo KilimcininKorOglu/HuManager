@@ -14,7 +14,7 @@ struct WebUIDetectionResult: Sendable {
 
 final class WebUIVersionDetector: Sendable {
 
-    private let logger = Logger(subsystem: "com.humanager", category: "WebUIDetector")
+    private let logger = AppLog.logger("WebUIDetector")
 
     func detect(using client: HuaweiAPIClient) async throws -> WebUIDetectionResult {
         // Step 1: Try /api/webserver/token (WebUI v10/v21)

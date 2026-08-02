@@ -6,7 +6,7 @@ final class HuaweiAPIClient: Sendable {
     let baseURL: URL
     let session: SessionManager
     private let urlSession: URLSession
-    private let logger = Logger(subsystem: "com.humanager", category: "APIClient")
+    private let logger = AppLog.logger("APIClient")
     private let timeout: TimeInterval = 30
 
     init(host: String, scheme: String = "http") {

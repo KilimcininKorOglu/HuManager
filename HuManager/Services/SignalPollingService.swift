@@ -3,7 +3,7 @@ import os
 
 final class SignalPollingService: Sendable {
 
-    private let logger = Logger(subsystem: "com.humanager", category: "SignalPolling")
+    private let logger = AppLog.logger("SignalPolling")
     private let deviceService = DeviceService()
 
     func startPolling(client: HuaweiAPIClient, interval: TimeInterval = 2.0) -> AsyncStream<SignalInfo> {

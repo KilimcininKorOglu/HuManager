@@ -3,7 +3,7 @@ import os
 
 final class SHA256AuthProvider: Sendable {
 
-    private let logger = Logger(subsystem: "com.humanager", category: "SHA256Auth")
+    private let logger = AppLog.logger("SHA256Auth")
 
     func login(
         client: HuaweiAPIClient,

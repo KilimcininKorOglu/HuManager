@@ -3,7 +3,7 @@ import os
 
 final class WiFiService: Sendable {
 
-    private let logger = Logger(subsystem: "com.humanager", category: "WiFiService")
+    private let logger = AppLog.logger("WiFiService")
 
     func getSettings(client: HuaweiAPIClient) async throws -> WiFiSettings {
         let response = try await client.get(Endpoints.wifiSettings)

@@ -3,7 +3,7 @@ import os
 
 actor HeartbeatService {
 
-    private let logger = Logger(subsystem: "com.humanager", category: "Heartbeat")
+    private let logger = AppLog.logger("Heartbeat")
     private var heartbeatTask: Task<Void, Never>?
     private(set) var isRunning = false
     var interval: TimeInterval = 30.0

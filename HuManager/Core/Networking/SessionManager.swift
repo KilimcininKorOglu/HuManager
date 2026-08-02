@@ -3,7 +3,7 @@ import os
 
 actor SessionManager {
 
-    private let logger = Logger(subsystem: "com.humanager", category: "SessionManager")
+    private let logger = AppLog.logger("SessionManager")
 
     private(set) var sessionId: String?
     private var tokens: [String] = []

@@ -3,7 +3,7 @@ import os
 
 final class SCRAMAuthProvider: Sendable {
 
-    private let logger = Logger(subsystem: "com.humanager", category: "SCRAMAuth")
+    private let logger = AppLog.logger("SCRAMAuth")
 
     func login(
         client: HuaweiAPIClient,

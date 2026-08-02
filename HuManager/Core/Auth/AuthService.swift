@@ -3,7 +3,7 @@ import os
 
 final class AuthService: Sendable {
 
-    private let logger = Logger(subsystem: "com.humanager", category: "AuthService")
+    private let logger = AppLog.logger("AuthService")
     private let versionDetector = WebUIVersionDetector()
     private let sha256Provider = SHA256AuthProvider()
     private let scramProvider = SCRAMAuthProvider()

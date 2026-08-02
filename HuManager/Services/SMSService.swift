@@ -3,7 +3,7 @@ import os
 
 final class SMSService: Sendable {
 
-    private let logger = Logger(subsystem: "com.humanager", category: "SMSService")
+    private let logger = AppLog.logger("SMSService")
 
     func getCount(client: HuaweiAPIClient) async throws -> SMSCount {
         let response = try await client.get(Endpoints.smsCount)

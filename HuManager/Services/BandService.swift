@@ -3,7 +3,7 @@ import os
 
 final class BandService: Sendable {
 
-    private let logger = Logger(subsystem: "com.humanager", category: "BandService")
+    private let logger = AppLog.logger("BandService")
 
     struct BandConfig: Sendable {
         let networkMode: String

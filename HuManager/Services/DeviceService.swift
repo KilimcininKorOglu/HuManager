@@ -3,7 +3,7 @@ import os
 
 final class DeviceService: Sendable {
 
-    private let logger = Logger(subsystem: "com.humanager", category: "DeviceService")
+    private let logger = AppLog.logger("DeviceService")
 
     func getDeviceInfo(client: HuaweiAPIClient) async throws -> DeviceInfo {
         let response = try await client.get(Endpoints.deviceInfo)
