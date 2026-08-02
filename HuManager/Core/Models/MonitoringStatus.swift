@@ -53,7 +53,9 @@ struct MonitoringStatus: Sendable {
         batteryStatus = dict["BatteryStatus"] as? String ?? ""
         batteryLevel = dict["BatteryLevel"] as? String ?? ""
         batteryPercent = dict["BatteryPercent"] as? String ?? ""
-        simStatus = dict["simlockStatus"] as? String ?? dict["SimStatus"] as? String ?? ""
+        // SimStatus is the SIM state; simlockStatus is the lock state and is
+        // present even when SimStatus is, so it must not take priority.
+        simStatus = dict["SimStatus"] as? String ?? ""
         primaryDNS = dict["PrimaryDns"] as? String ?? ""
         secondaryDNS = dict["SecondaryDns"] as? String ?? ""
     }
