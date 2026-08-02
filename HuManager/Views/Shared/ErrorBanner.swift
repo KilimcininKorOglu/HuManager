@@ -29,4 +29,3 @@ struct ErrorBanner: View {
         .padding(.horizontal)
     }
 }
-

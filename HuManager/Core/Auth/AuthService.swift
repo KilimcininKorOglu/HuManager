@@ -24,7 +24,7 @@ final class AuthService: Sendable {
         // Step 1: Initialize session — GET root to establish SessionID cookie
         logger.info("Starting session...")
         do {
-            let _ = try await client.getRaw("/")
+            _ = try await client.getRaw("/")
         } catch {
             logger.debug("Root GET error (may be expected): \(error.localizedDescription)")
         }

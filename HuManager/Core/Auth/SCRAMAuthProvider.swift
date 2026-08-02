@@ -68,7 +68,7 @@ final class SCRAMAuthProvider: Sendable {
             sendCookies: true
         )
 
-        let _ = try XMLResponseParser.parseResponse(data: authData)
+        _ = try XMLResponseParser.parseResponse(data: authData)
         logger.info("SCRAM login successful")
 
         await client.session.setLoggedIn(true)

@@ -9,14 +9,14 @@ enum ConnectionState: Sendable {
 }
 
 enum SidebarTab: String, CaseIterable, Identifiable {
-    case dashboard = "dashboard"
-    case signal = "signal"
-    case bands = "bands"
-    case sms = "sms"
-    case network = "network"
-    case traffic = "traffic"
-    case wifi = "wifi"
-    case device = "device"
+    case dashboard
+    case signal
+    case bands
+    case sms
+    case network
+    case traffic
+    case wifi
+    case device
 
     var id: String { rawValue }
 
