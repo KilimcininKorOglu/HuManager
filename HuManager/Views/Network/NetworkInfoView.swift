@@ -42,7 +42,11 @@ struct NetworkInfoView: View {
                                 ? lang.t(L.status.connectionConnected)
                                 : lang.t(L.status.connectionDisconnected)
                         )
-                        infoRow(lang.t(L.status.signalLabel), "\(monitoring?.signalIcon ?? 0)/5")
+                        // Some firmware leaves SignalIcon at 0 even with a good
+                        // signal; the Signal tab reads /api/device/signal instead.
+                        if let bars = monitoring?.signalIcon, bars > 0 {
+                            infoRow(lang.t(L.status.signalLabel), "\(bars)/5")
+                        }
                         infoRow(lang.t(L.network.serviceDomain), serviceDomain)
                         infoRow(lang.t(L.network.simStatus), monitoring?.simStatus ?? "")
                         infoRow(lang.t(L.network.primaryDns), monitoring?.primaryDNS ?? "")

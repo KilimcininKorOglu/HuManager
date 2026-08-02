@@ -17,7 +17,11 @@ struct NetworkInfoCard: View {
                     if let monitoring {
                         Divider()
                         infoRow(label: lang.t(L.status.connection), value: monitoring.isConnected ? lang.t(L.status.connectionConnected) : lang.t(L.status.connectionDisconnected))
-                        infoRow(label: lang.t(L.status.signalLabel), value: "\(monitoring.signalIcon)/5")
+                        // Some firmware leaves SignalIcon at 0 even with a good
+                        // signal; the Signal tab reads /api/device/signal instead.
+                        if monitoring.signalIcon > 0 {
+                            infoRow(label: lang.t(L.status.signalLabel), value: "\(monitoring.signalIcon)/5")
+                        }
 
                         if !monitoring.batteryPercent.isEmpty {
                             infoRow(label: lang.t(L.status.battery), value: "%\(monitoring.batteryPercent)")
