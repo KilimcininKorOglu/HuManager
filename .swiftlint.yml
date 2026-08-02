@@ -1,0 +1,33 @@
+included:
+  - HuManager
+  - HuManagerTests
+
+excluded:
+  - .build
+  - DerivedData
+  - helper-projects
+
+identifier_name:
+  min_length:
+    warning: 2
+  excluded:
+    # Crypto and loop operands, where a longer name adds nothing.
+    - a
+    - b
+    - i
+    - k
+
+type_name:
+  # `L` is the localization key namespace; its short name is the point.
+  min_length:
+    warning: 1
+  # The nested enums inside `L` are lowercase on purpose, so call sites read
+  # as `L.general.connect` rather than `L.General.connect`.
+  validates_start_with_lowercase: off
+
+line_length:
+  warning: 180
+
+disabled_rules:
+  # The codebase uses trailing commas in multi-line literals throughout.
+  - trailing_comma
